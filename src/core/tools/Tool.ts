@@ -1,4 +1,4 @@
-import { EventBus } from '../events';
+import * as THREE from 'three';
 
 export interface PointerEventData {
   raycaster: THREE.Raycaster;
@@ -20,8 +20,8 @@ export abstract class Tool {
     // Optional override
   }
 
-  public onPointerDown(event: PointerEventData): void {}
-  public onPointerMove(event: PointerEventData): void {}
-  public onPointerUp(event: PointerEventData): void {}
-  public onPointerCancel(event: PointerEventData): void {}
+  public onPointerDown(_event: PointerEventData): void {}
+  public onPointerMove(_event: PointerEventData): void {}
+  public onPointerUp(_event: PointerEventData): void {}
+  public onPointerCancel(_event: PointerEventData): void {}
 }

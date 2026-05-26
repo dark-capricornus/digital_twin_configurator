@@ -1,4 +1,4 @@
-import { AssetMetadata, AssetRecord } from './types';
+import type { AssetMetadata, AssetRecord } from './types';
 import { EventBus } from '../events';
 
 class AssetRegistryImpl {

@@ -1,9 +1,23 @@
 import type { PointerEventData } from './Tool';
 import { Tool } from './Tool';
+import { SelectTool } from './SelectTool';
+import { CursorTool } from './CursorTool';
+import { AddTool } from './AddTool';
+import { MeasureTool } from './MeasureTool';
+import { AnnotateTool } from './AnnotateTool';
 
 class ToolManagerImpl {
   private tools = new Map<string, Tool>();
   private activeToolId: string | null = null;
+
+  constructor() {
+    // Automatically register all editor tools
+    this.registerTool(new SelectTool());
+    this.registerTool(new CursorTool());
+    this.registerTool(new AddTool());
+    this.registerTool(new MeasureTool());
+    this.registerTool(new AnnotateTool());
+  }
 
   public registerTool(tool: Tool): void {
     this.tools.set(tool.id, tool);
@@ -23,8 +37,6 @@ class ToolManagerImpl {
       const newTool = this.tools.get(this.activeToolId);
       if (newTool) newTool.onActivate();
     }
-
-    // In a full implementation, we might emit a TOOL_CHANGED event here.
   }
 
   public getActiveTool(): Tool | null {

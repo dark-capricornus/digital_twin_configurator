@@ -1,5 +1,6 @@
 import type { Command } from './CommandManager';
 import { useSceneStore, type SceneNode } from '../../store/scene';
+import { RuntimeContext } from '../../runtime/world/RuntimeContext';
 
 export class AddNodeCommand implements Command {
   public name = 'Add Node';
@@ -12,10 +13,37 @@ export class AddNodeCommand implements Command {
 
   execute() {
     useSceneStore.getState().addNode(this.node, this.parentId);
+
+    // Synchronize to hidden authoritative ECS RuntimeWorld
+    RuntimeContext.runInWorldContext((world) => {
+      world.createEntity(this.node.name, this.node.id);
+      
+      // Store transform component
+      world.addComponent({
+        type: 'Transform',
+        entityId: this.node.id,
+        position: [...this.node.transform.position],
+        rotation: [...this.node.transform.rotation],
+        scale: [...this.node.transform.scale]
+      } as any);
+
+      // Store render component
+      world.addComponent({
+        type: 'Render',
+        entityId: this.node.id,
+        visible: true,
+        color: (this.node.components.color as string) || '#cccccc'
+      } as any);
+    });
   }
 
   undo() {
     useSceneStore.getState().removeNode(this.node.id);
+
+    // Sync removal to authoritative ECS RuntimeWorld
+    RuntimeContext.runInWorldContext((world) => {
+      world.removeEntity(this.node.id);
+    });
   }
 }
 
@@ -36,12 +64,36 @@ export class RemoveNodeCommand implements Command {
       this.nodeBackup = JSON.parse(JSON.stringify(node));
       this.parentIdBackup = node.parentId;
       state.removeNode(this.nodeId);
+
+      // Sync removal to authoritative ECS RuntimeWorld
+      RuntimeContext.runInWorldContext((world) => {
+        world.removeEntity(this.nodeId);
+      });
     }
   }
 
   undo() {
     if (this.nodeBackup && this.parentIdBackup) {
       useSceneStore.getState().addNode(this.nodeBackup, this.parentIdBackup);
+
+      // Re-create in ECS RuntimeWorld
+      const node = this.nodeBackup;
+      RuntimeContext.runInWorldContext((world) => {
+        world.createEntity(node.name, node.id);
+        world.addComponent({
+          type: 'Transform',
+          entityId: node.id,
+          position: [...node.transform.position],
+          rotation: [...node.transform.rotation],
+          scale: [...node.transform.scale]
+        } as any);
+        world.addComponent({
+          type: 'Render',
+          entityId: node.id,
+          visible: true,
+          color: (node.components.color as string) || '#cccccc'
+        } as any);
+      });
     }
   }
 }
@@ -55,10 +107,12 @@ export class UpdateTransformCommand implements Command {
 
   constructor(
     nodeId: string,
-    newTransform: Partial<SceneNode['transform']>
+    newTransform: Partial<SceneNode['transform']>,
+    previousTransform?: Partial<SceneNode['transform']>
   ) {
     this.nodeId = nodeId;
     this.newTransform = newTransform;
+    this.previousTransform = previousTransform;
   }
 
   execute() {
@@ -75,11 +129,45 @@ export class UpdateTransformCommand implements Command {
     }
     
     state.updateNodeTransform(this.nodeId, this.newTransform);
+
+    // Sync transform update to authoritative ECS RuntimeWorld
+    RuntimeContext.runInWorldContext((world) => {
+      let entity = world.getEntity(this.nodeId);
+      if (!entity) {
+        entity = world.createEntity(node.name, this.nodeId);
+      }
+      
+      let transformComp = world.getComponent<any>(this.nodeId, 'Transform');
+      if (!transformComp) {
+        transformComp = {
+          type: 'Transform',
+          entityId: this.nodeId,
+          position: [...node.transform.position],
+          rotation: [...node.transform.rotation],
+          scale: [...node.transform.scale]
+        };
+        world.addComponent(transformComp);
+      }
+
+      if (this.newTransform.position) transformComp.position = [...this.newTransform.position];
+      if (this.newTransform.rotation) transformComp.rotation = [...this.newTransform.rotation];
+      if (this.newTransform.scale) transformComp.scale = [...this.newTransform.scale];
+    });
   }
 
   undo() {
     if (this.previousTransform) {
       useSceneStore.getState().updateNodeTransform(this.nodeId, this.previousTransform);
+
+      // Sync undo to authoritative ECS RuntimeWorld
+      RuntimeContext.runInWorldContext((world) => {
+        const transformComp = world.getComponent<any>(this.nodeId, 'Transform');
+        if (transformComp) {
+          if (this.previousTransform.position) transformComp.position = [...this.previousTransform.position];
+          if (this.previousTransform.rotation) transformComp.rotation = [...this.previousTransform.rotation];
+          if (this.previousTransform.scale) transformComp.scale = [...this.previousTransform.scale];
+        }
+      });
     }
   }
 }

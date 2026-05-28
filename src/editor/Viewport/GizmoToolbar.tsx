@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEditorStore } from '../../store/editor';
 import { Button } from '@/components/ui/button';
-import { MousePointer2, Crosshair, Move, RotateCw, Maximize, Scan, PenLine, Ruler, Box } from 'lucide-react';
+import { MousePointer2, Crosshair, Move, RotateCw, Scaling, Move3d, PenLine, Ruler, Box } from 'lucide-react';
 
 export const GizmoToolbar: React.FC = () => {
   const editorMode = useEditorStore((state) => state.editorMode);
@@ -15,8 +15,8 @@ export const GizmoToolbar: React.FC = () => {
     { mode: 'cursor', icon: Crosshair, title: 'Cursor' },
     { mode: 'translate', icon: Move, title: 'Move' },
     { mode: 'rotate', icon: RotateCw, title: 'Rotate' },
-    { mode: 'scale', icon: Maximize, title: 'Scale' },
-    { mode: 'transform', icon: Scan, title: 'Transform' },
+    { mode: 'scale', icon: Scaling, title: 'Scale' },
+    { mode: 'transform', icon: Move3d, title: 'Transform' },
     { mode: 'annotate', icon: PenLine, title: 'Annotate' },
     { mode: 'measure', icon: Ruler, title: 'Measure' },
     { mode: 'add', icon: Box, title: 'Add Cube' },

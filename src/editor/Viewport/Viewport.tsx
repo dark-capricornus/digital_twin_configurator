@@ -1,13 +1,17 @@
 /* eslint-disable react-hooks/immutability, react-hooks/refs */
 import React, { Suspense } from 'react';
-import { useThree, Canvas } from '@react-three/fiber';
+import { useThree, Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Grid, TransformControls, useGLTF, Html, GizmoHelper, GizmoViewport } from '@react-three/drei';
-import { useSceneStore, type SceneNode } from '../../store/scene';
+import { useSceneStore } from '../../store/scene';
 import { useEditorStore } from '../../store/editor';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { persistenceService } from '../../core/persistence/IndexedDBProvider';
 import { commandManager } from '../../core/commands/CommandManager';
-import { UpdateTransformCommand, AddNodeCommand } from '../../core/commands/SceneCommands';
+import { UpdateTransformCommand } from '../../core/commands/SceneCommands';
+import { PlaceModelCommand } from '../../core/commands/PlacementCommands';
+import { PlacementSystem } from '../../runtime/systems/PlacementSystem';
+import { groundPlaneManager } from '../../runtime/systems/GroundPlane';
 import { SelectionService } from '../../core/services/SelectionService';
 import { PointerInteractionLayer } from './PointerInteractionLayer';
 
@@ -15,17 +19,11 @@ const GLTFModelRenderer: React.FC<{ url: string }> = ({ url }) => {
   const { scene } = useGLTF(url);
   
   const clonedScene = React.useMemo(() => {
-    const clone = scene.clone();
-    // Compute bounding box to center the model and rest it on the floor
-    const box = new THREE.Box3().setFromObject(clone);
-    const center = box.getCenter(new THREE.Vector3());
-    
-    // Shift model so its bottom rests exactly at Y=0 and it is centered on X/Z
-    clone.position.x -= center.x;
-    clone.position.y -= box.min.y;
-    clone.position.z -= center.z;
-    
-    return clone;
+    // Clone the scene without repositioning.
+    // Grounding is handled at placement time by PlacementSystem.
+    // The node's transform.position in the scene store already contains
+    // the grounded position, applied by the parent group in NodeRenderer.
+    return scene.clone();
   }, [scene]);
 
   return <primitive object={clonedScene} />;
@@ -360,60 +358,170 @@ const NodeRenderer: React.FC<{ nodeId: string }> = ({ nodeId }) => {
   );
 };
 
+// ==========================================
+// SCENE CACHE — Caches loaded GLB scenes to
+// avoid redundant loading during drag preview
+// and placement.
+// ==========================================
+const glbSceneCache = new Map<string, THREE.Group>();
+
+/**
+ * Loads a GLB scene imperatively (not via React hooks).
+ * Used for bounding-box analysis before placement.
+ * Results are cached for reuse.
+ */
+async function loadGLBSceneForAnalysis(assetId: string): Promise<THREE.Group | null> {
+  // Check cache first
+  if (glbSceneCache.has(assetId)) {
+    return glbSceneCache.get(assetId)!.clone();
+  }
+
+  // Mock assets don't have blobs — skip analysis
+  if (assetId.startsWith('mock-')) {
+    return null;
+  }
+
+  try {
+    const asset = await persistenceService.getAsset(assetId);
+    if (!asset?.file) return null;
+
+    const url = URL.createObjectURL(asset.file);
+    const loader = new GLTFLoader();
+
+    return new Promise<THREE.Group | null>((resolve) => {
+      loader.load(
+        url,
+        (gltf) => {
+          URL.revokeObjectURL(url);
+          glbSceneCache.set(assetId, gltf.scene);
+          resolve(gltf.scene.clone());
+        },
+        undefined,
+        () => {
+          URL.revokeObjectURL(url);
+          resolve(null);
+        },
+      );
+    });
+  } catch {
+    return null;
+  }
+}
+
 const DragDropHandler: React.FC = () => {
   const { gl, camera } = useThree();
   const rootNodeId = useSceneStore((state) => state.rootNodeId);
 
   React.useEffect(() => {
+    let currentDragAssetId: string | null = null;
+
+    const getNDC = (e: DragEvent): THREE.Vector2 => {
+      const rect = gl.domElement.getBoundingClientRect();
+      return new THREE.Vector2(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1,
+      );
+    };
+
+    const raycastToGround = (ndc: THREE.Vector2): THREE.Vector3 => {
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(ndc, camera);
+      const hit = groundPlaneManager.raycast(raycaster.ray);
+      return hit || new THREE.Vector3(0, 0, 0);
+    };
+
     const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
       if (e.dataTransfer) {
         e.dataTransfer.dropEffect = 'copy';
       }
+
+      // Update placement preview position in real-time
+      const assetId = currentDragAssetId;
+      if (assetId) {
+        const ndc = getNDC(e);
+        const groundPoint = raycastToGround(ndc);
+        useEditorStore.getState().setPlacementPreview(
+          assetId,
+          [groundPoint.x, groundPoint.y, groundPoint.z],
+        );
+      }
     };
 
-    const handleDrop = (e: DragEvent) => {
+    const handleDragEnter = (e: DragEvent) => {
+      // Capture asset ID from transfer data on enter
+      // Note: Some browsers restrict getData during dragover, so we
+      // track it via a module-level variable set on dragstart
+      const assetId = e.dataTransfer?.getData('application/asset-id');
+      if (assetId) {
+        currentDragAssetId = assetId;
+      }
+    };
+
+    const handleDragLeave = (e: DragEvent) => {
+      // Only clear if leaving the canvas entirely
+      const rect = gl.domElement.getBoundingClientRect();
+      const x = e.clientX;
+      const y = e.clientY;
+      if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
+        useEditorStore.getState().clearPlacementPreview();
+        currentDragAssetId = null;
+      }
+    };
+
+    const handleDrop = async (e: DragEvent) => {
       e.preventDefault();
       const assetId = e.dataTransfer?.getData('application/asset-id');
       const assetName = e.dataTransfer?.getData('application/asset-name');
-      
+
+      // Clear preview
+      useEditorStore.getState().clearPlacementPreview();
+      currentDragAssetId = null;
+
       if (!assetId) return;
 
-      const rect = gl.domElement.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      const ndc = getNDC(e);
+      const dropPoint = raycastToGround(ndc);
 
-      const raycaster = new THREE.Raycaster();
-      raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
+      // Load GLB scene for bounding-box analysis
+      const gltfScene = await loadGLBSceneForAnalysis(assetId);
 
-      const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-      const target = new THREE.Vector3();
-      raycaster.ray.intersectPlane(plane, target);
+      let groundedPosition: [number, number, number];
+      let boundingInfo = null;
 
-      const pos = target ? [target.x, target.y, target.z] : [0, 0, 0];
+      if (gltfScene) {
+        // Full bounding-box grounding for real GLBs
+        boundingInfo = PlacementSystem.computeBoundingInfo(gltfScene);
+        groundedPosition = PlacementSystem.computeGroundedPosition(gltfScene, dropPoint);
+      } else {
+        // Mock models: use drop point directly (they handle their own grounding)
+        groundedPosition = [dropPoint.x, dropPoint.y, dropPoint.z];
+      }
 
-      const newNode: SceneNode = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: assetName || 'Object',
-        type: 'Model',
-        parentId: rootNodeId,
-        transform: { position: pos as [number, number, number], rotation: [0, 0, 0], scale: [1, 1, 1] },
-        components: { assetId },
-        children: [],
-      };
-
-      commandManager.executeCommand(new AddNodeCommand(newNode, rootNodeId));
-      SelectionService.selectNode(newNode.id);
+      // Commit through PlaceModelCommand (undo/redo safe)
+      const cmd = new PlaceModelCommand(
+        assetId,
+        assetName || 'Object',
+        groundedPosition,
+        rootNodeId,
+        boundingInfo,
+      );
+      commandManager.executeCommand(cmd);
+      SelectionService.selectNode(cmd.getNodeId());
 
       // Place the cursor on the added object
-      useEditorStore.getState().setCursorPosition(newNode.transform.position);
+      useEditorStore.getState().setCursorPosition(groundedPosition);
     };
 
     gl.domElement.addEventListener('dragover', handleDragOver);
+    gl.domElement.addEventListener('dragenter', handleDragEnter);
+    gl.domElement.addEventListener('dragleave', handleDragLeave);
     gl.domElement.addEventListener('drop', handleDrop);
 
     return () => {
       gl.domElement.removeEventListener('dragover', handleDragOver);
+      gl.domElement.removeEventListener('dragenter', handleDragEnter);
+      gl.domElement.removeEventListener('dragleave', handleDragLeave);
       gl.domElement.removeEventListener('drop', handleDrop);
     };
   }, [gl, camera, rootNodeId]);
@@ -523,6 +631,101 @@ const MeasurementHelper: React.FC = () => {
   );
 };
 
+// ==========================================
+// PLACEMENT PREVIEW — Semi-transparent ghost
+// model shown during drag-over for
+// professional placement feedback.
+// ==========================================
+
+const GroundContactIndicator: React.FC<{ position: [number, number, number] }> = ({ position }) => {
+  const ringRef = React.useRef<THREE.Mesh>(null);
+
+  useFrame((_, delta) => {
+    if (ringRef.current) {
+      ringRef.current.rotation.z += delta * 0.5;
+    }
+  });
+
+  return (
+    <group position={[position[0], 0.005, position[2]]}>
+      {/* Outer glow ring */}
+      <mesh ref={ringRef} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[0.25, 0.30, 32]} />
+        <meshBasicMaterial color="#22d3ee" transparent opacity={0.6} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Inner dot */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.06, 16]} />
+        <meshBasicMaterial color="#22d3ee" transparent opacity={0.8} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Shadow disc */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.004, 0]}>
+        <circleGeometry args={[0.5, 32]} />
+        <meshBasicMaterial color="#000000" transparent opacity={0.15} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  );
+};
+
+const PlacementPreview: React.FC = () => {
+  const previewAssetId = useEditorStore((state) => state.placementPreviewAssetId);
+  const previewPosition = useEditorStore((state) => state.placementPreviewPosition);
+  const [previewScene, setPreviewScene] = React.useState<THREE.Group | null>(null);
+  const groupRef = React.useRef<THREE.Group>(null);
+
+  // Load the preview model when drag enters
+  React.useEffect(() => {
+    if (!previewAssetId || previewAssetId.startsWith('mock-')) {
+      setPreviewScene(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    loadGLBSceneForAnalysis(previewAssetId).then((scene) => {
+      if (!cancelled && scene) {
+        // Make the preview transparent/ghosted
+        scene.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            const originalMat = mesh.material as THREE.MeshStandardMaterial;
+            const ghostMat = originalMat.clone();
+            ghostMat.transparent = true;
+            ghostMat.opacity = 0.4;
+            ghostMat.depthWrite = false;
+            ghostMat.color.lerp(new THREE.Color('#22d3ee'), 0.3);
+            mesh.material = ghostMat;
+          }
+        });
+        setPreviewScene(scene);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [previewAssetId]);
+
+  // Update position on every frame for smooth tracking
+  React.useEffect(() => {
+    if (groupRef.current && previewPosition && previewScene) {
+      const groundedY = PlacementSystem.computeGroundedY(previewScene);
+      groupRef.current.position.set(previewPosition[0], groundedY, previewPosition[2]);
+    }
+  }, [previewPosition, previewScene]);
+
+  if (!previewAssetId || !previewScene || !previewPosition) return null;
+
+  return (
+    <>
+      <group ref={groupRef}>
+        <primitive object={previewScene} />
+      </group>
+      <GroundContactIndicator position={previewPosition} />
+    </>
+  );
+};
+
 export const Viewport: React.FC = () => {
   const rootNodeId = useSceneStore((state) => state.rootNodeId);
   const isGridVisible = useEditorStore((state) => state.isGridVisible);
@@ -555,6 +758,7 @@ export const Viewport: React.FC = () => {
 
         <NodeRenderer nodeId={rootNodeId} />
         <DragDropHandler />
+        <PlacementPreview />
         <PointerInteractionLayer />
 
         {/* Dynamic viewport interactive layers */}

@@ -28,9 +28,12 @@ import { HierarchyPanel } from '../Hierarchy/HierarchyPanel';
 import { EditorSelector, type EditorTabType } from '../EditorSelector';
 import { InspectorPanel } from '../Inspector/InspectorPanel';
 import { commandManager } from '../../core/commands/CommandManager';
-import { AddNodeCommand } from '../../core/commands/SceneCommands';
+import { PlaceModelCommand } from '../../core/commands/PlacementCommands';
+import { PlacementSystem } from '../../runtime/systems/PlacementSystem';
 import { SelectionService } from '../../core/services/SelectionService';
 import { useSceneStore } from '../../store/scene';
+import { persistenceService } from '../../core/persistence/IndexedDBProvider';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 interface FileItem {
   id: string;
@@ -162,19 +165,39 @@ export const AssetBrowserPanel: React.FC<AssetBrowserPanelProps> = ({ defaultTab
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handlePlaceAsset = (assetId: string, assetName: string) => {
-    const newNode = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: assetName,
-      type: 'Model' as const,
-      parentId: rootNodeId,
-      transform: { position: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] },
-      components: { assetId },
-      children: [],
-    };
-    // @ts-ignore
-    commandManager.executeCommand(new AddNodeCommand(newNode, rootNodeId));
-    SelectionService.selectNode(newNode.id);
+  const handlePlaceAsset = async (assetId: string, assetName: string) => {
+    let groundedPosition: [number, number, number] = [0, 0, 0];
+    let boundingInfo = null;
+
+    // For real GLBs, compute grounded position via bounding-box analysis
+    if (!assetId.startsWith('mock-')) {
+      try {
+        const asset = await persistenceService.getAsset(assetId);
+        if (asset?.file) {
+          const url = URL.createObjectURL(asset.file);
+          const loader = new GLTFLoader();
+          const gltf = await new Promise<any>((resolve, reject) => {
+            loader.load(url, resolve, undefined, reject);
+          });
+          URL.revokeObjectURL(url);
+
+          boundingInfo = PlacementSystem.computeBoundingInfo(gltf.scene);
+          groundedPosition = PlacementSystem.computeCenteredGroundedPosition(gltf.scene);
+        }
+      } catch (err) {
+        console.warn('[AssetBrowser] Failed to compute grounded position for', assetName, err);
+      }
+    }
+
+    const cmd = new PlaceModelCommand(
+      assetId,
+      assetName,
+      groundedPosition,
+      rootNodeId,
+      boundingInfo,
+    );
+    commandManager.executeCommand(cmd);
+    SelectionService.selectNode(cmd.getNodeId());
   };
 
   const handleDragStart = (e: React.DragEvent, item: FileItem) => {

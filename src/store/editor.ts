@@ -17,6 +17,10 @@ export interface EditorState {
   measurementStart: [number, number, number] | null;
   measurementEnd: [number, number, number] | null;
   
+  // Placement Preview State (drag-over ghost)
+  placementPreviewAssetId: string | null;
+  placementPreviewPosition: [number, number, number] | null;
+  
   // Panel Visibility
   panelVisibility: {
     assets: boolean;
@@ -36,6 +40,8 @@ export interface EditorState {
   addAnnotation: (points: Array<[number, number, number]>) => void;
   clearAnnotations: () => void;
   setMeasurementPoints: (start: [number, number, number] | null, end: [number, number, number] | null) => void;
+  setPlacementPreview: (assetId: string | null, position: [number, number, number] | null) => void;
+  clearPlacementPreview: () => void;
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -48,6 +54,9 @@ export const useEditorStore = create<EditorState>((set) => ({
   annotations: [],
   measurementStart: null,
   measurementEnd: null,
+  
+  placementPreviewAssetId: null,
+  placementPreviewPosition: null,
   
   panelVisibility: {
     assets: true,
@@ -75,4 +84,6 @@ export const useEditorStore = create<EditorState>((set) => ({
   })),
   clearAnnotations: () => set({ annotations: [] }),
   setMeasurementPoints: (start, end) => set({ measurementStart: start, measurementEnd: end }),
+  setPlacementPreview: (assetId, position) => set({ placementPreviewAssetId: assetId, placementPreviewPosition: position }),
+  clearPlacementPreview: () => set({ placementPreviewAssetId: null, placementPreviewPosition: null }),
 }));

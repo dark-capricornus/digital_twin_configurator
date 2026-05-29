@@ -50,3 +50,19 @@ export interface AnimationComponent extends Component {
   time: number;
   loop: boolean;
 }
+
+export interface PlacementComponent extends Component {
+  type: 'Placement';
+  /** The computed Y offset that grounds the model on the surface */
+  groundedY: number;
+  /** World-space bounding box minimum corner */
+  boundingMin: [number, number, number];
+  /** World-space bounding box maximum corner */
+  boundingMax: [number, number, number];
+  /** World-space bounding box center */
+  boundingCenter: [number, number, number];
+  /** XZ footprint dimensions: [width, depth] */
+  footprint: [number, number];
+  /** How the pivot was determined */
+  pivotMode: 'center' | 'bottom' | 'auto' | 'custom';
+}

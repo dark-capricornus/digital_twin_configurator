@@ -19,6 +19,10 @@ export type EventPayloads = {
   ASSET_IMPORTED: { assetId: string; name: string };
   ASSET_REMOVED: { assetId: string };
   
+  // Placement Events
+  MODEL_PLACED: { nodeId: string; assetId: string; position: [number, number, number] };
+  PLACEMENT_PREVIEW_UPDATED: { assetId: string; position: [number, number, number] | null };
+
   // Command Events
   COMMAND_EXECUTED: { commandName: string; timestamp: number };
   COMMAND_UNDONE: { commandName: string; timestamp: number };

@@ -1,4 +1,7 @@
 export * from './Tool';
 export * from './ToolManager';
 export * from './SelectTool';
-// Future: MoveTool, RotateTool, ScaleTool
+export * from './CursorTool';
+export * from './AddTool';
+export * from './MeasureTool';
+export * from './AnnotateTool';

@@ -10,4 +10,22 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('three')) {
+              return 'vendor-three';
+            }
+            if (id.includes('@react-three') || id.includes('drei')) {
+              return 'vendor-r3f';
+            }
+            return 'vendor';
+          }
+        }
+      }
+    }
+  }
 })

@@ -34,11 +34,12 @@ export class PackageSerializer {
     const assetManifest: PackageManifest['assets'] = {};
     
     for (const asset of assets) {
-      assetManifest[asset.id] = {
-        name: asset.name,
-        type: asset.type,
-        format: asset.format,
-        path: `assets/${asset.id}.${asset.format}`
+      const format = asset.metadata.format || 'glb';
+      assetManifest[asset.metadata.id] = {
+        name: asset.metadata.name,
+        type: asset.metadata.type,
+        format: format,
+        path: `assets/${asset.metadata.id}.${format}`
       };
     }
 

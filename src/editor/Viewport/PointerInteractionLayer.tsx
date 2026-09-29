@@ -20,10 +20,19 @@ export const PointerInteractionLayer: React.FC = () => {
       
       const firstHit = intersects.length > 0 ? intersects[0] : undefined;
 
+      // Fallback intersection with ground grid plane at Y=0
+      const point = new THREE.Vector3();
+      if (firstHit) {
+        point.copy(firstHit.point);
+      } else {
+        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+        raycaster.ray.intersectPlane(plane, point);
+      }
+
       return {
         raycaster,
-        point: firstHit ? firstHit.point : new THREE.Vector3(),
-        normal: firstHit ? firstHit.face?.normal : undefined,
+        point,
+        normal: firstHit ? firstHit.face?.normal : new THREE.Vector3(0, 1, 0),
         object: firstHit ? firstHit.object : undefined,
         originalEvent: event,
       };

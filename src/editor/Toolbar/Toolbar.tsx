@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEditorStore, type GizmoMode } from '../../store/editor';
 import { Button } from '@/components/ui/button';
-import { MousePointer2, Move, RotateCw } from 'lucide-react';
+import { MousePointer2, Move, RotateCw, Scaling } from 'lucide-react';
 
 const VerticalToolButton = ({ 
   mode, 
@@ -38,6 +38,8 @@ export const Toolbar: React.FC = () => {
       <div className="w-8 h-px bg-zinc-800 my-1" />
       <VerticalToolButton mode="translate" icon={Move} activeGizmoMode={activeGizmoMode} setGizmoMode={setGizmoMode} />
       <VerticalToolButton mode="rotate" icon={RotateCw} activeGizmoMode={activeGizmoMode} setGizmoMode={setGizmoMode} />
+      <VerticalToolButton mode="scale" icon={Scaling} activeGizmoMode={activeGizmoMode} setGizmoMode={setGizmoMode} />
     </div>
   );
 };
+

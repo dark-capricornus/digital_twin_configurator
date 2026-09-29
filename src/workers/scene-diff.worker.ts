@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 import type { SceneNode } from '../store/scene';
-import { SceneDiffer, type PatchOperation } from '../core/scene/SceneDiffer';
+import { SceneDiffer } from '../core/scene/SceneDiffer';
 
 interface DiffJobMessage {
   jobId: string;

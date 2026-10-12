@@ -1,0 +1,101 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "BuildFloor.dc.html": {
+      "h": 883,
+      "is_interactive": true,
+      "title": "Build › Floor",
+      "w": 1440,
+      "x": -1777,
+      "y": -179
+    },
+    "DefineStep2.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Define › Machine Block",
+      "w": 1440,
+      "x": 4388,
+      "y": -179
+    },
+    "Main.dc.html": {
+      "h": 883,
+      "is_interactive": true,
+      "title": "Main App — Build Mode",
+      "w": 1440,
+      "x": -257,
+      "y": -179
+    },
+    "NewProjectImport.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "New Package — Option C: Import Package",
+      "w": 1440,
+      "x": 7508,
+      "y": -196
+    },
+    "NewProjectTemplate.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "New Package — Option B: From Template",
+      "w": 1440,
+      "x": 5948,
+      "y": -196
+    },
+    "ProjectSetup.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "① Project Setup",
+      "w": 1440,
+      "x": 4388,
+      "y": 848
+    },
+    "ReceiveInputs.dc.html": {
+      "h": 883,
+      "is_interactive": true,
+      "title": "Build › Receive Inputs",
+      "w": 1440,
+      "x": 2828,
+      "y": -179
+    },
+    "StartMethod.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "② Starting Method",
+      "w": 1440,
+      "x": 5908,
+      "y": 848
+    },
+    "TemplateBrowser.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "② Browse Templates",
+      "w": 1440,
+      "x": 7468,
+      "y": 848
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-29T00:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "file": "Main.dc.html",
+    "view": "focused"
+  },
+  "notes": {},
+  "order": [
+    "BuildFloor.dc.html",
+    "Main.dc.html",
+    "ReceiveInputs.dc.html",
+    "DefineStep2.dc.html",
+    "NewProjectTemplate.dc.html",
+    "NewProjectImport.dc.html",
+    "ProjectSetup.dc.html",
+    "StartMethod.dc.html",
+    "TemplateBrowser.dc.html"
+  ],
+  "pages": [],
+  "title": "Digital Twin Configurator — Main App Screen"
+}

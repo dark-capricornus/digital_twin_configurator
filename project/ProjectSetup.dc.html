@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project Setup</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+:root{
+  --color-blue:#3e7bbf;--color-blue-light:#60a5fa;--color-green:#4ade80;
+  --color-yellow:#facc15;--color-var:#CD6FB8;
+  --bg-topbar:#1a1a1a;--bg-panel:#1d1d1d;--bg-canvas:#181818;
+}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;background:#1d1d1d;color:#ccc}
+*{box-sizing:border-box}
+button{cursor:pointer;font-family:inherit}
+input,select{font-family:inherit;font-size:11px;background:#161c24;border:1px solid #2a3444;border-radius:2px;color:#ddd;outline:none}
+input:focus,select:focus{border-color:#3e7bbf}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#1d1d1d}::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:2px}
+.field-row{display:flex;flex-direction:column;gap:5px}
+.field-label{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.06em}
+.field-input{height:28px;padding:0 10px;width:100%}
+.level-row{display:flex;align-items:center;gap:10px;padding:7px 10px;background:#161616;border:1px solid #1e1e1e;border-radius:3px}
+.level-row:not(:last-child){margin-bottom:4px}
+.level-badge{font-size:9px;font-weight:600;padding:2px 6px;border-radius:2px;flex-shrink:0;width:52px;text-align:center}
+.industry-chip{padding:4px 10px;border-radius:3px;border:1px solid #2a2a2a;background:#1a1a1a;color:#666;font-size:10px;cursor:pointer}
+.industry-chip.active{background:#192030;border-color:#3e7bbf;color:#60a5fa}
+.twin-row{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid #1a1a1a}
+.twin-row:last-child{border-bottom:none}
+.twin-row:hover{background:#1f1f1f}
+.twin-btn{padding:4px 12px;border-radius:3px;font-size:10px;font-weight:600;cursor:pointer;background:transparent}
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;height:100%;width:100%;background:#1d1d1d;overflow:hidden;font-size:12px">
+
+  <!-- TOPBAR -->
+  <div style="height:28px;background:#1a1a1a;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;flex-shrink:0">
+    <div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-right:1px solid #0a0a0a;flex-shrink:0">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4772b3" stroke-width="1.4" fill="rgba(71,114,179,0.15)"></path><path d="M8 5l4 2.5v2.5L8 12.5 4 10V7.5L8 5z" fill="#4772b3" opacity=".6"></path></svg>
+    </div>
+    <div style="display:flex;align-items:center;height:100%">
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">File</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">Edit</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">View</span>
+    </div>
+    <div style="display:flex;align-items:stretch;height:100%;padding:0 2px;gap:2px;margin-left:8px">
+      <div style="padding:0 14px;display:flex;align-items:center;background:#3e7bbf;color:#fff;font-size:12px;font-weight:600;border-radius:3px 3px 0 0">Build</div>
+      <div style="padding:0 14px;display:flex;align-items:center;background:#2a2a2a;color:#888;font-size:12px;border-radius:3px 3px 0 0;cursor:pointer">Client View</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:6px;padding:0 10px">
+      <div style="display:flex;align-items:center;gap:0;padding:2px 0;background:#252525;border:1px solid #0a0a0a;border-radius:3px;overflow:hidden">
+        <span style="font-size:10px;color:#fff;font-weight:600;background:#3e7bbf;padding:2px 10px">① Setup</span>
+        <span style="font-size:10px;color:#444;padding:2px 8px">→</span>
+        <span style="font-size:10px;color:#555;padding:2px 10px">② Start</span>
+        <span style="font-size:10px;color:#444;padding:2px 8px">→</span>
+        <span style="font-size:10px;color:#555;padding:2px 10px">③ Define</span>
+        <span style="font-size:10px;color:#444;padding:2px 8px">→</span>
+        <span style="font-size:10px;color:#555;padding:2px 10px">④ Map</span>
+        <span style="font-size:10px;color:#444;padding:2px 8px">→</span>
+        <span style="font-size:10px;color:#555;padding:2px 10px">⑤ Publish</span>
+      </div>
+      <div style="width:22px;height:22px;border-radius:50%;background:#3e7bbf;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">P</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div style="flex:1;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 60px;background:#181818">
+
+    <div style="width:100%;max-width:820px;display:flex;flex-direction:column;gap:28px">
+
+      <!-- Page header -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <div style="width:22px;height:22px;border-radius:50%;background:#3e7bbf;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">1</div>
+          <div style="font-size:16px;font-weight:600;color:#ddd">Project Setup</div>
+        </div>
+        <div style="font-size:11px;color:#555;line-height:1.6;padding-left:32px">Continue a saved twin where you left off, or set up a new project. Package identity and hierarchy labels are set once per project.</div>
+      </div>
+
+      <!-- Section: Saved twins -->
+      <div style="background:#1d1d1d;border:1px solid #222;border-radius:6px;overflow:hidden">
+        <div style="padding:12px 16px;background:#1a1a1a;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em">Saved Twins</span>
+          <span style="font-size:9px;color:#444">3 projects</span>
+        </div>
+
+        <div class="twin-row">
+          <div style="width:30px;height:30px;border-radius:6px;background:#1a2030;border:1px solid #2a3040;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L22 7v10L12 22 2 17V7L12 2z" stroke="#60a5fa" stroke-width="1.4" fill="rgba(96,165,250,0.08)"></path></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:600;color:#ccc">Alloy Wheel Plant — Phase 1</div>
+            <div style="font-size:10px;color:#555;margin-top:2px">Manufacturing · Plant / Area / Machine / Block · v1.0.0</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:9px;color:#4ade80">● In progress · Step ③ Define</div>
+            <div style="font-size:9px;color:#444;margin-top:2px">Edited 2 hours ago</div>
+          </div>
+          <button class="twin-btn" style="border:1px solid #3e7bbf;color:#60a5fa">Continue →</button>
+        </div>
+
+        <div class="twin-row">
+          <div style="width:30px;height:30px;border-radius:6px;background:#1a2a1a;border:1px solid #2a4a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#4ade80" stroke-width="1.4" fill="rgba(74,222,128,0.06)"></rect><path d="M7 8h10M7 12h6M7 16h4" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"></path></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:600;color:#ccc">Chennai Warehouse — Inbound</div>
+            <div style="font-size:10px;color:#555;margin-top:2px">Warehouse &amp; Fulfilment · Site / Zone / Asset / Bay · v0.3.0</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:9px;color:#facc15">● Draft · Step ② Start</div>
+            <div style="font-size:9px;color:#444;margin-top:2px">Edited 3 days ago</div>
+          </div>
+          <button class="twin-btn" style="border:1px solid #444;color:#888">Tweak</button>
+        </div>
+
+        <div class="twin-row">
+          <div style="width:30px;height:30px;border-radius:6px;background:#1e1626;border:1px solid #3d2552;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#CD6FB8" stroke-width="1.3" fill="rgba(205,111,184,0.08)"></path></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:600;color:#ccc">HPDC Casting Line — Pilot</div>
+            <div style="font-size:10px;color:#555;margin-top:2px">Manufacturing · Plant / Area / Machine / Block · v2.1.0</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:9px;color:#888">✓ Published</div>
+            <div style="font-size:9px;color:#444;margin-top:2px">Edited 1 month ago</div>
+          </div>
+          <button class="twin-btn" style="border:1px solid #444;color:#888">Tweak</button>
+        </div>
+      </div>
+
+      <!-- Section: New project setup -->
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="flex:1;height:1px;background:#222"></div>
+        <span style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.06em">or start a new project</span>
+        <div style="flex:1;height:1px;background:#222"></div>
+      </div>
+
+      <!-- Section: Package identity -->
+      <div style="background:#1d1d1d;border:1px solid #222;border-radius:6px;overflow:hidden">
+        <div style="padding:12px 16px;background:#1a1a1a;border-bottom:1px solid #222;font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em">Package Identity</div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:16px">
+
+          <div style="display:flex;gap:16px">
+            <div class="field-row" style="flex:2">
+              <div class="field-label">Package name <span style="color:#c85252">*</span></div>
+              <input type="text" class="field-input" placeholder="e.g. Alloy Wheel Plant — Phase 1">
+              <div style="font-size:9px;color:#3a3a3a">Used as the package identifier and exported filename</div>
+            </div>
+            <div class="field-row" style="flex:1">
+              <div class="field-label">Version</div>
+              <input type="text" class="field-input" value="1.0.0">
+            </div>
+          </div>
+
+          <div style="display:flex;gap:16px">
+            <div class="field-row" style="flex:1">
+              <div class="field-label">Client / Owner</div>
+              <input type="text" class="field-input" placeholder="e.g. Apex Wheels Ltd.">
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Section: Domain / Industry -->
+      <div style="background:#1d1d1d;border:1px solid #222;border-radius:6px;overflow:hidden">
+        <div style="padding:12px 16px;background:#1a1a1a;border-bottom:1px solid #222;font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em">Domain &amp; Industry</div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+
+          <div class="field-row">
+            <div class="field-label">Industry / Domain type</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:2px">
+              <div class="industry-chip active">Manufacturing</div>
+              <div class="industry-chip">Warehouse &amp; Fulfilment</div>
+              <div class="industry-chip">Logistics &amp; Shipment</div>
+              <div class="industry-chip">Maritime</div>
+              <div class="industry-chip">Utilities</div>
+              <div class="industry-chip">Custom →</div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Section: Hierarchy labels -->
+      <div style="background:#1d1d1d;border:1px solid #222;border-radius:6px;overflow:hidden">
+
+
+      </div>
+
+      <!-- CTA -->
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;padding-bottom:20px">
+        <button style="padding:7px 16px;background:transparent;border:1px solid #2a2a2a;border-radius:3px;color:#555;font-size:11px">Cancel</button>
+        <button style="padding:7px 22px;background:#3e7bbf;border:none;border-radius:3px;color:#fff;font-size:11px;font-weight:600">Continue → Step 2: Starting Method</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

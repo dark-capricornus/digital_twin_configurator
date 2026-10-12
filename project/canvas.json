@@ -1,0 +1,117 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "BuildFloor.dc.html": {
+      "h": 883,
+      "is_interactive": true,
+      "title": "Build › Floor",
+      "w": 1440,
+      "x": -1777,
+      "y": -179
+    },
+    "DefineStep2.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Define › Machine Block",
+      "w": 1440,
+      "x": 4388,
+      "y": -179
+    },
+    "ImportState.dc.html": {
+      "h": 900,
+      "w": 1440,
+      "x": 5908,
+      "y": -179
+    },
+    "Main.dc.html": {
+      "h": 883,
+      "is_interactive": true,
+      "title": "Main App — Build Mode",
+      "w": 1440,
+      "x": -257,
+      "y": -179
+    },
+    "NewProject.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "New Package — Option D: Import Sources",
+      "w": 1440,
+      "x": 7428,
+      "y": -179
+    },
+    "NewProjectBlank.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "New Package — Option A: Start Blank",
+      "w": 1440,
+      "x": 7428,
+      "y": 848
+    },
+    "NewProjectImport.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "New Package — Option C: Import Package",
+      "w": 1440,
+      "x": 10468,
+      "y": 848
+    },
+    "NewProjectTemplate.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "New Package — Option B: From Template",
+      "w": 1440,
+      "x": 8948,
+      "y": 848
+    },
+    "ProjectSetup.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "① Project Setup",
+      "w": 1440,
+      "x": 4388,
+      "y": 848
+    },
+    "StartMethod.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "② Starting Method",
+      "w": 1440,
+      "x": 5908,
+      "y": 848
+    },
+    "ReceiveInputs.dc.html": {
+      "h": 883,
+      "is_interactive": true,
+      "title": "Build › Receive Inputs",
+      "w": 1440,
+      "x": 2828,
+      "y": -179
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-29T00:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "file": "Main.dc.html",
+    "view": "focused"
+  },
+  "notes": {},
+  "order": [
+    "BuildFloor.dc.html",
+    "Main.dc.html",
+    "ReceiveInputs.dc.html",
+    "DefineStep2.dc.html",
+    "ImportState.dc.html",
+    "NewProject.dc.html",
+    "NewProjectBlank.dc.html",
+    "NewProjectTemplate.dc.html",
+    "NewProjectImport.dc.html",
+    "ProjectSetup.dc.html",
+    "StartMethod.dc.html"
+  ],
+  "pages": [],
+  "title": "Digital Twin Configurator — Main App Screen"
+}

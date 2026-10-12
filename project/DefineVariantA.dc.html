@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Variant A — Build › Define</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;background:#1d1d1d;color:#cccccc}
+*{box-sizing:border-box}
+button{cursor:pointer;font-family:inherit}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#1d1d1d}
+::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:2px}
+a{color:#4772b3}
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;background:#1d1d1d;overflow:hidden;font-size:12px;height:100%;width:100%">
+
+  <!-- ══ TOPBAR ══ -->
+  <div style="height:28px;background:#1a1a1a;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;flex-shrink:0;width:100%">
+    <div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-right:1px solid #0a0a0a;flex-shrink:0">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4772b3" stroke-width="1.4" fill="rgba(71,114,179,0.15)"></path><path d="M8 5l4 2.5v2.5L8 12.5 4 10V7.5L8 5z" fill="#4772b3" opacity="0.6"></path></svg>
+    </div>
+    <div style="display:flex;align-items:center;height:100%">
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">File</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">Edit</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">View</span>
+    </div>
+    <!-- workspace mode tabs -->
+    <div style="display:flex;align-items:stretch;height:100%;padding:0 2px;gap:2px;margin-left:8px">
+      <div style="padding:0 14px;display:flex;align-items:center;background:#3e7bbf;color:#fff;font-size:12px;font-weight:600;border-radius:3px 3px 0 0;cursor:pointer">Build</div>
+      <div style="padding:0 14px;display:flex;align-items:center;background:#2a2a2a;color:#888;font-size:12px;border-radius:3px 3px 0 0;cursor:pointer">Client View</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:6px;padding:0 10px">
+      <div style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;color:#e07b39;font-size:11px;font-weight:600">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2z" stroke="#e07b39" stroke-width="1.3" fill="rgba(224,123,57,0.12)"></path><path d="M8 7v3M8 11.5v.5" stroke="#e07b39" stroke-width="1.5" stroke-linecap="round"></path></svg>
+        2 Issues
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;color:#70b170;font-size:11px;font-weight:600">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#70b170" stroke-width="1.8"><path d="M8 12V4M4 7l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        1 Update
+      </div>
+      <div style="width:1px;height:16px;background:#3a3a3a;margin:0 2px"></div>
+      <button style="padding:3px 12px;background:#3e7bbf;border:1px solid #0a0a0a;border-radius:3px;color:#fff;font-size:12px;font-weight:600">Publish</button>
+      <div style="width:1px;height:16px;background:#3a3a3a"></div>
+      <button style="width:24px;height:24px;background:transparent;border:none;color:#888;display:flex;align-items:center;justify-content:center">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"></path></svg>
+      </button>
+      <div style="width:22px;height:22px;border-radius:50%;background:#3e7bbf;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;cursor:pointer">P</div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden;min-height:0;width:100%;height:100%">
+
+    <!-- LEFT TOOL STRIP -->
+    <div style="width:28px;flex-shrink:0;background:#2a2a2a;border-right:1px solid #0a0a0a;display:flex;flex-direction:column;align-items:center;padding:4px 0;gap:2px;overflow:hidden">
+      <div style="width:22px;height:22px;background:#3e7bbf;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Select">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="#fff"><path d="M3 2l10 5.5-5.5 1.5-1.5 5.5L3 2z"></path></svg>
+      </div>
+      <div style="width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Move">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><path d="M8 2v12M2 8h12M5 5l3-3 3 3M5 11l3 3 3-3M5 5L2 8l3 3M11 5l3 3-3 3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <div style="width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Rotate">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><path d="M13 8A5 5 0 1 1 5 3.5" stroke-linecap="round"></path><path d="M5 1v3h3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <div style="width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Focus">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><circle cx="8" cy="8" r="3"></circle><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke-linecap="round"></path></svg>
+      </div>
+      <div style="height:1px;width:18px;background:#3a3a3a;margin:3px 0"></div>
+      <div style="width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Add Block / Template">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"></rect><path d="M8 5v6M5 8h6" stroke-linecap="round"></path></svg>
+      </div>
+      <div style="flex:1"></div>
+    </div>
+
+    <!-- ══ CENTER: DEFINE TABLE VIEW ══ -->
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;position:relative">
+
+      <!-- Viewport header -->
+      <div style="height:30px;background:#2a2a2a;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 12px;gap:10px;flex-shrink:0">
+        <!-- Breadcrumb context -->
+        <span style="font-size:11px;color:#888">FURNACE_01</span>
+        <span style="font-size:10px;color:#555">·</span>
+        <span style="font-size:10px;color:#666">Smelting</span>
+        <div style="width:1px;height:14px;background:#333;margin:0 2px"></div>
+        <!-- Floor/Prototype/Define tabs -->
+        <div style="display:flex;align-items:center;gap:1px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;overflow:hidden">
+          <div style="padding:2px 8px;font-size:10px;color:#888;cursor:pointer">Floor</div>
+          <div style="padding:2px 8px;font-size:10px;color:#888;cursor:pointer">Prototype</div>
+          <div style="padding:2px 8px;background:#3e7bbf;font-size:10px;color:#fff;font-weight:600">Define</div>
+        </div>
+        <div style="flex:1"></div>
+        <!-- Import button -->
+        <button style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:transparent;border:1px solid #3e7bbf;border-radius:3px;color:#60a5fa;font-size:10px;cursor:pointer">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 2v8M5 7l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 12h10" stroke-linecap="round"></path></svg>
+          Import
+        </button>
+        <!-- Add Section -->
+        <button style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:transparent;border:1px solid #333;border-radius:3px;color:#888;font-size:10px;cursor:pointer">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><path d="M8 3v10M3 8h10" stroke-linecap="round"></path></svg>
+          Add Section
+        </button>
+      </div>
+
+      <!-- Column header row -->
+      <div style="height:22px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 12px;flex-shrink:0;font-size:9px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.06em">
+        <span style="flex:1">Property</span>
+        <span style="width:60px;text-align:right">Type</span>
+        <span style="width:50px;text-align:right">Unit</span>
+        <span style="width:68px;text-align:center;margin:0 6px">Alarms</span>
+        <span style="width:96px;text-align:center">Mapping</span>
+        <span style="width:34px"></span>
+        <span style="width:11px"></span>
+      </div>
+
+      <!-- Define body — scrollable property list -->
+      <div style="flex:1;overflow-y:auto;min-height:0">
+
+        <!-- ══ SECTION: Machine Metrics ══ -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Machine Metrics</span>
+          <button title="Add as variable" style="width: 16px; height: 16px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; color: #484848; margin-right: 2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Melt Bath Temp — SELECTED row -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:22px;background:#243040;border-bottom:1px solid #1e3050;cursor:pointer">
+          <div style="width:2px;height:14px;background:#3e7bbf;border-radius:1px;margin-right:7px;flex-shrink:0"></div>
+          <span style="flex:1;font-size:11px;color:#ddd;font-weight:500">Melt Bath Temp</span>
+          <span style="font-size:10px;color:#6688aa;width:60px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#7a5e38;width:50px;text-align:right">°C</span>
+          <div style="width:68px;display:flex;align-items:center;justify-content:center;gap:3px;margin:0 6px">
+            <span style="width:5px;height:5px;border-radius:50%;background:#e07b39;display:inline-block"></span>
+            <span style="width:5px;height:5px;border-radius:50%;background:#c85252;display:inline-block"></span>
+          </div>
+          <div style="width:96px;display:flex;align-items:center;justify-content:center;gap:4px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span>
+            <span style="font-size:9px;color:#70b170">Mapped</span>
+          </div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+        <!-- Inline edit form — two-column layout -->
+        <div style="background:#1a2333;border-bottom:2px solid #0a0a0a;padding:10px 16px 0 16px">
+          <div style="display:flex;gap:20px">
+            <!-- Left column -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <div>
+                <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Display Name</div>
+                <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 8px;font-size:10px;color:#ddd;display:flex;align-items:center">Melt Bath Temperature</div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <div style="flex:1">
+                  <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Value Type</div>
+                  <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#bbb;display:flex;align-items:center;justify-content:space-between;cursor:pointer"><span>Float</span><svg width="7" height="7" viewBox="0 0 10 10" fill="#555"><path d="M2 3l3 4 3-4H2z"></path></svg></div>
+                </div>
+                <div style="flex:1">
+                  <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Unit</div>
+                  <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#bbb;display:flex;align-items:center;justify-content:space-between;cursor:pointer"><span style="color:#c87a3a">°C</span><svg width="7" height="7" viewBox="0 0 10 10" fill="#555"><path d="M2 3l3 4 3-4H2z"></path></svg></div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Display As</div>
+                <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#bbb;display:flex;align-items:center;justify-content:space-between;cursor:pointer"><span>Gauge</span><svg width="7" height="7" viewBox="0 0 10 10" fill="#555"><path d="M2 3l3 4 3-4H2z"></path></svg></div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;height:22px">
+                <span style="font-size:10px;color:#888">Overridable by instance</span>
+                <div style="width:26px;height:13px;background:#3e7bbf;border-radius:7px;position:relative;cursor:pointer"><div style="position:absolute;right:2px;top:1.5px;width:10px;height:10px;background:#fff;border-radius:50%"></div></div>
+              </div>
+            </div>
+            <!-- Right column: Alarms + source -->
+            <div style="width:220px;flex-shrink:0">
+              <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px">Alarm Thresholds</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+                <span style="width:5px;height:5px;border-radius:50%;background:#e07b39;flex-shrink:0;display:inline-block"></span>
+                <span style="font-size:10px;color:#777;width:52px;flex-shrink:0">Warning</span>
+                <div style="flex:1;height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 8px;font-size:10px;color:#e07b39;display:flex;align-items:center">780</div>
+                <div style="width:30px;height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;font-size:9px;color:#555;display:flex;align-items:center;justify-content:center">°C</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+                <span style="width:5px;height:5px;border-radius:50%;background:#c85252;flex-shrink:0;display:inline-block"></span>
+                <span style="font-size:10px;color:#777;width:52px;flex-shrink:0">Critical</span>
+                <div style="flex:1;height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 8px;font-size:10px;color:#e07b39;display:flex;align-items:center">820</div>
+                <div style="width:30px;height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;font-size:9px;color:#555;display:flex;align-items:center;justify-content:center">°C</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;padding-top:4px;margin-top:2px;font-size:9px;color:#555">
+                <svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4"><rect x="3" y="2" width="10" height="7" rx="1"></rect><rect x="5" y="12" width="6" height="2" rx="1" fill="#444" stroke="none"></rect><path d="M6 9v3M10 9v3" stroke-linecap="round"></path></svg>
+                <span>Inherited from template as defined in furnance_01</span>
+              </div>
+            </div>
+          </div>
+          <!-- Save / Discard -->
+          <div style="display:flex;justify-content:flex-end;gap:6px;padding:8px 0;margin-top:6px;border-top:1px solid #1e2e40">
+            <button style="padding:3px 12px;background:transparent;border:1px solid #2a3a4a;border-radius:3px;color:#666;font-size:10px;cursor:pointer">Discard</button>
+            <button style="padding:3px 14px;background:#3e7bbf;border:1px solid #0a0a0a;border-radius:3px;color:#fff;font-size:10px;font-weight:600;cursor:pointer">Save Changes</button>
+          </div>
+        </div>
+        <!-- Zone Temperature -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:22px;border-bottom:1px solid #111;cursor:pointer">
+          
+          <span style="flex:1;font-size:11px;color:#888">Zone Temperature</span>
+          <span style="font-size:10px;color:#555;width:60px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">°C</span>
+          <div style="width:68px;display:flex;align-items:center;justify-content:center;gap:3px;margin:0 6px"><span style="width:5px;height:5px;border-radius:50%;background:#e07b39;display:inline-block"></span><span style="width:5px;height:5px;border-radius:50%;background:#c85252;display:inline-block"></span></div>
+          <div style="width:96px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Mapped</span></div>
+          <button title="Add as variable" style="width: 16px; height: 16px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; color: #CD6FB8; margin-right: 2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Process Temperature -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:22px;border-bottom:1px solid #111;cursor:pointer">
+          <span style="flex:1;font-size:11px;color:#888">Process Temperature</span>
+          <span style="font-size:10px;color:#555;width:60px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">°C</span>
+          <div style="width:68px;display:flex;align-items:center;justify-content:center;gap:3px;margin:0 6px"><span style="width:5px;height:5px;border-radius:50%;background:#555;display:inline-block"></span></div>
+          <div style="width:96px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Mapped</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Oil Level — issue highlight -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:22px;border-bottom:1px solid #111;cursor:pointer;background:rgba(200,82,82,0.06)">
+          <svg width="9" height="9" viewBox="0 0 16 16" fill="#e07b39" style="flex-shrink:0;margin-right:5px"><path d="M8 1l7 13H1L8 1z M8 6v4 M8 11.5v.5"></path></svg>
+          <span style="flex:1;font-size:11px;color:#c88">Oil Level</span>
+          <span style="font-size:10px;color:#c85252;width:60px;text-align:right">Int</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">%</span>
+          <div style="width:68px;display:flex;align-items:center;justify-content:center;gap:3px;margin:0 6px"><span style="width:5px;height:5px;border-radius:50%;background:#e07b39;display:inline-block"></span></div>
+          <div style="width:96px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#c85252;display:inline-block"></span><span style="font-size:9px;color:#c85252">Mismatch</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Furnace Pressure -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:22px;border-bottom:1px solid #111;cursor:pointer">
+          
+          <span style="flex:1;font-size:11px;color:#888">Furnace Pressure</span>
+          <span style="font-size:10px;color:#555;width:60px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">bar</span>
+          <div style="width:68px;display:flex;align-items:center;justify-content:center;gap:3px;margin:0 6px"><span style="width:5px;height:5px;border-radius:50%;background:#555;display:inline-block"></span></div>
+          <div style="width:96px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#555;display:inline-block"></span><span style="font-size:9px;color:#555">Unmapped</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Vibration -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:22px;border-bottom:1px solid #111;cursor:pointer">
+          <span style="flex:1;font-size:11px;color:#888">Vibration</span>
+          <span style="font-size:10px;color:#555;width:60px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">mm/s</span>
+          <div style="width:68px;display:flex;align-items:center;justify-content:center;gap:3px;margin:0 6px"><span style="width:5px;height:5px;border-radius:50%;background:#e07b39;display:inline-block"></span><span style="width:5px;height:5px;border-radius:50%;background:#c85252;display:inline-block"></span></div>
+          <div style="width:96px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Mapped</span></div>
+          <button title="Add as variable" style="width: 16px; height: 16px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; color: #CD6FB8; margin-right: 2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- ══ SECTION: Energy Consumption ══ -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;border-top:2px solid #0a0a0a;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Energy Consumption</span>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 12px;height:22px;border-bottom:1px solid #111;cursor:pointer">
+          
+          <span style="flex:1;font-size:11px;color:#888">Instant Power</span>
+          <span style="font-size:10px;color:#555;width:60px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">kW</span>
+          <div style="width:68px;display:flex;align-items:center;justify-content:center;margin:0 6px"></div>
+          <div style="width:96px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Mapped</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 12px;height:22px;border-bottom:1px solid #111;cursor:pointer">
+          <span style="flex:1;font-size:11px;color:#888">Total Energy</span>
+          <span style="font-size:10px;color:#555;width:60px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">kWh</span>
+          <div style="width:68px;display:flex;align-items:center;justify-content:center;margin:0 6px"></div>
+          <div style="width:96px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Mapped</span></div>
+          <button title="Add as variable" style="width: 16px; height: 16px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; color: #CD6FB8; margin-right: 2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- ══ SECTION: Production Data (collapsed) ══ -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;border-top:2px solid #0a0a0a;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Production Data</span>
+          <button title="Add as variable" style="width: 16px; height: 16px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; color: #CD6FB8; margin-right: 2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- ══ SECTION: Status & Run Info (collapsed) ══ -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Status &amp; Run Info</span>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- ══ SECTION: Alarms (collapsed) ══ -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Alarms</span>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- ══ SECTION: Maintenance (collapsed) ══ -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Maintenance</span>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- ══ SECTION: Asset Info (collapsed) ══ -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Asset Info</span>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px" onmouseover="this.style.color='#6a9ed4'" onmouseout="this.style.color='#484848'"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button><button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Add Section -->
+        <div style="padding:6px 8px;border-top:2px solid #0a0a0a">
+          <button style="width:100%;padding:5px 8px;background:transparent;border:1px dashed #333;border-radius:3px;color:#555;font-size:11px;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer">
+            <span style="font-size:14px;line-height:1;color:#444">+</span>
+            Add Section
+          </button>
+        </div>
+
+      </div><!-- end define body -->
+
+      <!-- Issues drawer -->
+      <div style="height:28px;background:#252525;border-top:1px solid #0a0a0a;display:flex;align-items:center;padding:0 10px;gap:10px;cursor:pointer;flex-shrink:0">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2z" stroke="#666" stroke-width="1.3" fill="rgba(100,100,100,0.1)"></path><path d="M8 7v3M8 11.5v.5" stroke="#666" stroke-width="1.4" stroke-linecap="round"></path></svg>
+        <span style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.06em">Issues</span>
+        <span style="font-size:10px;color:#555">▲</span>
+        <div style="display:flex;align-items:center;gap:8px;margin-left:4px">
+          <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#c85252;font-weight:600"><span style="width:5px;height:5px;border-radius:50%;background:#c85252;display:inline-block"></span>Type mismatch · Oil Level</span>
+          <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#e07b39;font-weight:600"><span style="width:5px;height:5px;border-radius:50%;background:#e07b39;display:inline-block"></span>Duplicate tag · Instant Power</span>
+        </div>
+        <div style="flex:1"></div>
+        <span style="font-size:10px;color:#555">click to expand</span>
+      </div>
+
+    </div><!-- end center -->
+
+    <!-- ══ RIGHT PANEL ══ -->
+    <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid #0a0a0a;background:#1d1d1d">
+
+      <!-- TOP: Plant Hierarchy -->
+      <div style="height:240px;flex-shrink:0;background:#1d1d1d;border-bottom:4px solid #0a0a0a;display:flex;flex-direction:column;overflow:hidden">
+        <div style="height:24px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 6px;gap:4px;flex-shrink:0">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="2" fill="#888" rx="1"></rect><rect x="2" y="7" width="9" height="2" fill="#888" rx="1"></rect><rect x="2" y="11" width="6" height="2" fill="#888" rx="1"></rect></svg>
+          <span style="font-size:11px;color:#ccc;flex:1">Plant Hierarchy</span>
+          <div style="display:flex;gap:2px">
+            <button style="padding:1px 6px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:2px;color:#ccc;font-size:10px">Hierarchy</button>
+            <button style="padding:1px 6px;background:transparent;border:1px solid transparent;border-radius:2px;color:#555;font-size:10px">Library</button>
+          </div>
+        </div>
+        <div style="padding:3px 5px;background:#252525;border-bottom:1px solid #0a0a0a;flex-shrink:0">
+          <div style="background:#1d1d1d;border:1px solid #0a0a0a;border-radius:3px;padding:3px 6px;display:flex;align-items:center;gap:5px">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="2"><circle cx="7" cy="7" r="5"></circle><path d="M12 12l2.5 2.5"></path></svg>
+            <span style="font-size:11px;color:#444">Filter...</span>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:2px 0">
+          <!-- Root: Alloy Wheel Mfg -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#ccc;font-size:11px;height:20px">
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0;margin-right:4px"><path d="M2 3l4 4 4-4H2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><rect x="2" y="5" width="12" height="9" rx="2"></rect><path d="M5 5V3a3 3 0 0 1 6 0v2" stroke-linecap="round"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Alloy Wheel Mfg</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- Smelting -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#ccc;font-size:11px;height:20px">
+            <div style="width:12px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0;margin-right:4px"><path d="M2 3l4 4 4-4H2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Smelting</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- FURNACE_01 selected -->
+          <div style="display:flex;align-items:center;padding:0 6px;background:#3e7bbf;font-size:11px;height:20px">
+            <div style="width:24px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="none" style="flex-shrink:0;margin-right:4px"><rect x="1" y="1" width="8" height="8" rx="1" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"></rect></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="rgba(255,255,255,0.6)" style="flex-shrink:0;margin-right:4px"><rect x="3" y="3" width="10" height="10" rx="2"></rect></svg>
+            <span style="flex:1;color:#fff;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">FURNACE_01</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- FURNACE_02 -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#aaa;font-size:11px;height:20px">
+            <div style="width:24px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="none" style="flex-shrink:0;margin-right:4px"><rect x="1" y="1" width="8" height="8" rx="1" fill="none" stroke="#555" stroke-width="1"></rect></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="#666" style="flex-shrink:0;margin-right:4px"><rect x="3" y="3" width="10" height="10" rx="2"></rect></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">FURNACE_02</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- Casting (LPDC) collapsed -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#aaa;font-size:11px;height:20px">
+            <div style="width:12px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#666" style="flex-shrink:0;margin-right:4px"><path d="M3 2l4 4-4 4V2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Casting (LPDC)</span>
+            <span style="font-size:9px;color:#555;margin-right:4px;flex-shrink:0">3</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- Machining -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#aaa;font-size:11px;height:20px">
+            <div style="width:12px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#666" style="flex-shrink:0;margin-right:4px"><path d="M3 2l4 4-4 4V2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Machining</span>
+            <span style="font-size:9px;color:#555;margin-right:4px;flex-shrink:0">5</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- Heat Treatment -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#aaa;font-size:11px;height:20px">
+            <div style="width:12px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#666" style="flex-shrink:0;margin-right:4px"><path d="M3 2l4 4-4 4V2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Heat Treatment</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM: Property Inspector — detail editor for selected property -->
+      <div style="flex:1;display:flex;min-height:0;overflow:hidden">
+
+        <!-- Icon tab strip — Properties / Mapping / Model -->
+        <div style="width:26px;background:#252525;border-right:1px solid #0a0a0a;display:flex;flex-direction:column;align-items:center;padding:3px 0;gap:1px;flex-shrink:0">
+          <div style="width:22px;height:22px;background:#3e7bbf;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Properties">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"></rect><rect x="9" y="2" width="5" height="5" rx="1"></rect><rect x="2" y="9" width="5" height="5" rx="1"></rect><rect x="9" y="9" width="5" height="5" rx="1"></rect></svg>
+          </div>
+          <div style="width:22px;height:22px;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Mapping">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.4"><path d="M2 8h12M8 2v12M5 5l6 6M11 5l-6 6"></path></svg>
+          </div>
+          <div style="width:22px;height:22px;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Model">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.4"><path d="M8 2l5 3v5l-5 3-5-3V5L8 2z"></path></svg>
+          </div>
+        </div>
+
+        <!-- Property detail editor — shown when a property row is selected -->
+        <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:#1d1d1d">
+
+          <!-- Header: selected property name + section breadcrumb -->
+          <div style="height:24px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 8px;gap:6px;flex-shrink:0">
+            <div style="width:2px;height:14px;background:#3e7bbf;border-radius:1px;flex-shrink:0"></div>
+            <span style="font-size:11px;color:#ddd;font-weight:500;flex:1">Melt Bath Temp</span>
+            <span style="font-size:9px;color:#555">Machine Metrics</span>
+          </div>
+
+          <!-- Editor body -->
+          <div style="flex:1;overflow-y:auto;padding:0 0 40px 0">
+
+            <!-- ── Display Name ── -->
+            <div style="padding:8px 8px 0 8px">
+              <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px">Display Name</div>
+              <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 8px;font-size:11px;color:#ddd;display:flex;align-items:center">Melt Bath Temperature</div>
+            </div>
+
+            <!-- ── Value Type + Unit (side by side) ── -->
+            <div style="display:flex;gap:6px;padding:6px 8px 0 8px">
+              <div style="flex:1">
+                <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px">Value Type</div>
+                <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#bbb;display:flex;align-items:center;justify-content:space-between;cursor:pointer">
+                  <span>Float</span><svg width="7" height="7" viewBox="0 0 10 10" fill="#555"><path d="M2 3l3 4 3-4H2z"></path></svg>
+                </div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px">Unit</div>
+                <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#bbb;display:flex;align-items:center;justify-content:space-between;cursor:pointer">
+                  <span style="color:#c87a3a">°C</span><svg width="7" height="7" viewBox="0 0 10 10" fill="#555"><path d="M2 3l3 4 3-4H2z"></path></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Display As ── -->
+            <div style="padding:6px 8px 0 8px">
+              <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px">Display As</div>
+              <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#bbb;display:flex;align-items:center;justify-content:space-between;cursor:pointer">
+                <span>Gauge</span><svg width="7" height="7" viewBox="0 0 10 10" fill="#555"><path d="M2 3l3 4 3-4H2z"></path></svg>
+              </div>
+            </div>
+
+            <!-- ── Overridable toggle ── -->
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 8px 0 8px">
+              <span style="font-size:10px;color:#aaa">Overridable by instance</span>
+              <div style="width:26px;height:13px;background:#3e7bbf;border-radius:7px;flex-shrink:0;position:relative;cursor:pointer">
+                <div style="position:absolute;right:2px;top:1.5px;width:10px;height:10px;background:#fff;border-radius:50%"></div>
+              </div>
+            </div>
+
+            <!-- ── Divider ── -->
+            <div style="margin:10px 8px 0 8px;height:1px;background:#252525"></div>
+
+            <!-- ── Alarms sub-section ── -->
+            <div style="padding:8px 8px 0 8px">
+              <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px">
+                <svg width="7" height="7" viewBox="0 0 10 10" fill="#888"><path d="M2 3l4 4 4-4H2z"></path></svg>
+                <span style="font-size:10px;font-weight:600;color:#aaa;letter-spacing:0.01em">Alarms</span>
+              </div>
+              <!-- Warning -->
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+                <span style="width:5px;height:5px;border-radius:50%;background:#e07b39;flex-shrink:0;display:inline-block"></span>
+                <span style="font-size:10px;color:#777;width:52px;flex-shrink:0">Warning</span>
+                <div style="flex:1;height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#e07b39;display:flex;align-items:center">780</div>
+                <div style="width:30px;height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;font-size:9px;color:#555;display:flex;align-items:center;justify-content:center">°C</div>
+              </div>
+              <!-- Critical -->
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="width:5px;height:5px;border-radius:50%;background:#c85252;flex-shrink:0;display:inline-block"></span>
+                <span style="font-size:10px;color:#777;width:52px;flex-shrink:0">Critical</span>
+                <div style="flex:1;height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#e07b39;display:flex;align-items:center">820</div>
+                <div style="width:30px;height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;font-size:9px;color:#555;display:flex;align-items:center;justify-content:center">°C</div>
+              </div>
+            </div>
+
+            <!-- ── Divider ── -->
+            <div style="margin:10px 8px 0 8px;height:1px;background:#252525"></div>
+
+            <!-- ── Source marker ── -->
+            <div style="margin:8px 8px 0 8px;padding:5px 7px;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:3px;display:flex;align-items:center;gap:5px;font-size:9px;color:#555">
+              <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.2"><rect x="3" y="2" width="10" height="7" rx="1"></rect><rect x="5" y="12" width="6" height="2" rx="1" fill="#444" stroke="none"></rect><path d="M6 9v3M10 9v3" stroke-linecap="round"></path></svg>
+              <span style="color:#60a5fa">Template</span>
+              <span>· inherited · read-only here</span>
+            </div>
+
+          </div><!-- end editor body -->
+
+          <!-- Save / Discard footer -->
+          <div style="display:flex;gap:6px;padding:7px 8px;border-top:1px solid #0a0a0a;flex-shrink:0;background:#1d1d1d">
+            <button style="flex:1;padding:4px 0;background:transparent;border:1px solid #333;border-radius:3px;color:#666;font-size:10px;cursor:pointer">Discard</button>
+            <button style="flex:2;padding:4px 0;background:#3e7bbf;border:1px solid #0a0a0a;border-radius:3px;color:#fff;font-size:10px;font-weight:600;cursor:pointer">Save Changes</button>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- end right panel -->
+
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

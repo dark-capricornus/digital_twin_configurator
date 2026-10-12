@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Build › Floor</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;background:#1d1d1d;color:#cccccc}
+*{box-sizing:border-box}
+button{cursor:pointer;font-family:inherit}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#1d1d1d}
+::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:2px}
+a{color:#4772b3}
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;background:#1d1d1d;overflow:hidden;font-size:12px;height:100%;width:100%">
+
+  <!-- ══ TOPBAR ══ -->
+  <div style="height:28px;background:#1a1a1a;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;flex-shrink:0;width:100%">
+    <div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-right:1px solid #0a0a0a;flex-shrink:0">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4772b3" stroke-width="1.4" fill="rgba(71,114,179,0.15)"></path><path d="M8 5l4 2.5v2.5L8 12.5 4 10V7.5L8 5z" fill="#4772b3" opacity="0.6"></path></svg>
+    </div>
+    <div style="display:flex;align-items:center;height:100%">
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">File</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">Edit</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">View</span>
+    </div>
+    <!-- Breadcrumb -->
+    <div style="display:flex;align-items:center;height:100%;padding:0 10px;gap:5px;border-right:1px solid #0a0a0a">
+      <span style="font-size:11px;color:#888">Alloy Wheel</span>
+      <span style="font-size:10px;color:#444">›</span>
+      <span style="font-size:11px;color:#bbb;font-weight:500">Plant</span>
+    </div>
+    <!-- Mode tabs -->
+    <div style="display:flex;align-items:stretch;height:100%;padding:0 2px;gap:2px;margin-left:8px">
+      <div style="padding:0 14px;display:flex;align-items:center;background:#3e7bbf;color:#fff;font-size:12px;font-weight:600;border-radius:3px 3px 0 0;cursor:pointer">Build</div>
+      <div style="padding:0 14px;display:flex;align-items:center;background:#2a2a2a;color:#888;font-size:12px;border-radius:3px 3px 0 0;cursor:pointer">Client View</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:6px;padding:0 10px">
+      <div style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;color:#e07b39;font-size:11px;font-weight:600">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2z" stroke="#e07b39" stroke-width="1.3" fill="rgba(224,123,57,0.12)"></path><path d="M8 7v3M8 11.5v.5" stroke="#e07b39" stroke-width="1.5" stroke-linecap="round"></path></svg>
+        2 Issues
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;color:#70b170;font-size:11px;font-weight:600">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#70b170" stroke-width="1.8"><path d="M8 12V4M4 7l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        1 Update
+      </div>
+      <div style="width:1px;height:16px;background:#3a3a3a;margin:0 2px"></div>
+      <button style="padding:3px 12px;background:#3e7bbf;border:1px solid #0a0a0a;border-radius:3px;color:#fff;font-size:12px;font-weight:600">Publish</button>
+      <div style="width:1px;height:16px;background:#3a3a3a"></div>
+      <div style="width:22px;height:22px;border-radius:50%;background:#3e7bbf;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;cursor:pointer">P</div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden;min-height:0;width:100%;height:100%">
+
+    <!-- ══ LEFT PANEL ══ -->
+    <div style="width:240px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #0a0a0a;background:#1d1d1d">
+
+      <!-- Tab strip: Hierarchy | Library -->
+      <div style="display:flex;height:26px;border-bottom:1px solid #0a0a0a;flex-shrink:0">
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#ccc;background:#252525;border-bottom:2px solid #3e7bbf;cursor:pointer">Hierarchy</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:11px;color:#555;cursor:pointer">Library</div>
+      </div>
+
+      <!-- Search -->
+      <div style="padding:5px 8px;border-bottom:1px solid #0a0a0a;flex-shrink:0">
+        <div style="background:#141414;border:1px solid #2a2a2a;border-radius:3px;padding:3px 7px;display:flex;align-items:center;gap:5px">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"></circle><path d="M10.5 10.5l3 3" stroke-linecap="round"></path></svg>
+          <span style="font-size:10px;color:#444">Search plant…</span>
+        </div>
+      </div>
+
+      <!-- Hierarchy tree -->
+      <div style="flex:1;overflow-y:auto;min-height:0;padding:4px 0">
+
+        <!-- Plant root -->
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;gap:4px;cursor:pointer">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0"><path d="M2 3l3 4 3-4H2z"></path></svg>
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><rect x="1" y="3" width="14" height="11" rx="2" stroke="#4772b3" stroke-width="1.3" fill="rgba(71,114,179,0.1)"></rect><path d="M4 3V2a2 2 0 0 1 4 0v1" stroke="#4772b3" stroke-width="1.3"></path><path d="M1 7h14" stroke="#4772b3" stroke-width="1" opacity="0.4"></path></svg>
+          <span style="font-size:11px;color:#bbb;flex:1">Alloy Wheel Plant</span>
+          <span style="font-size:9px;color:#444">21</span>
+        </div>
+
+        <!-- Area: Casting -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 20px;height:22px;gap:4px;cursor:pointer">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0"><path d="M2 3l3 4 3-4H2z"></path></svg>
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#888" stroke-width="1.2" stroke-dasharray="2 1.5" fill="rgba(255,255,255,0.03)"></rect></svg>
+          <span style="font-size:11px;color:#999;flex:1">Casting</span>
+          <span style="font-size:9px;color:#444">6</span>
+        </div>
+
+        <!-- FURNACE_01 — SELECTED -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 34px;height:22px;gap:5px;background:#243040;cursor:pointer">
+          <div style="width:2px;height:14px;background:#3e7bbf;border-radius:1px;flex-shrink:0"></div>
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4ade80" stroke-width="1.3" fill="rgba(74,222,128,0.12)"></path></svg>
+          <span style="font-size:11px;color:#ddd;font-weight:500;flex:1">FURNACE_01</span>
+          <span style="font-size:9px;color:#555;font-style:italic">LPDC</span>
+        </div>
+
+        <!-- FURNACE_02 -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 34px;height:22px;gap:5px;cursor:pointer">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#fb923c" stroke-width="1.3" fill="rgba(251,146,60,0.12)"></path></svg>
+          <span style="font-size:11px;color:#888;flex:1">FURNACE_02</span>
+          <span style="font-size:9px;color:#555;font-style:italic">LPDC</span>
+        </div>
+
+        <!-- LPDC_01 -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 34px;height:22px;gap:5px;cursor:pointer">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4ade80" stroke-width="1.3" fill="rgba(74,222,128,0.12)"></path></svg>
+          <span style="font-size:11px;color:#888;flex:1">LPDC_01</span>
+          <span style="font-size:9px;color:#555;font-style:italic">LPDC</span>
+        </div>
+
+        <!-- LPDC_02 -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 34px;height:22px;gap:5px;cursor:pointer">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4ade80" stroke-width="1.3" fill="rgba(74,222,128,0.12)"></path></svg>
+          <span style="font-size:11px;color:#888;flex:1">LPDC_02</span>
+          <span style="font-size:9px;color:#555;font-style:italic">LPDC</span>
+        </div>
+
+        <!-- TRIM_01 -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 34px;height:22px;gap:5px;cursor:pointer">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#facc15" stroke-width="1.3" fill="rgba(250,204,21,0.12)"></path></svg>
+          <span style="font-size:11px;color:#888;flex:1">TRIM_01</span>
+          <span style="font-size:9px;color:#555;font-style:italic">Trim Press</span>
+        </div>
+
+        <!-- TRIM_02 -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 34px;height:22px;gap:5px;cursor:pointer">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#6b7280" stroke-width="1.3" fill="rgba(107,114,128,0.12)"></path></svg>
+          <span style="font-size:11px;color:#888;flex:1">TRIM_02</span>
+          <span style="font-size:9px;color:#555;font-style:italic">Trim Press</span>
+        </div>
+
+        <!-- Area: Machining -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 20px;height:22px;gap:4px;cursor:pointer;margin-top:2px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#888" stroke-width="1.2" stroke-dasharray="2 1.5" fill="rgba(255,255,255,0.03)"></rect></svg>
+          <span style="font-size:11px;color:#999;flex:1">Machining</span>
+          <span style="font-size:9px;color:#444">8</span>
+        </div>
+
+        <!-- Area: Quality -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 20px;height:22px;gap:4px;cursor:pointer">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#888" stroke-width="1.2" stroke-dasharray="2 1.5" fill="rgba(255,255,255,0.03)"></rect></svg>
+          <span style="font-size:11px;color:#999;flex:1">Quality</span>
+          <span style="font-size:9px;color:#444">7</span>
+        </div>
+
+      </div>
+
+      <!-- Bottom: Add Instance -->
+      <div style="padding:6px 8px;border-top:1px solid #0a0a0a;flex-shrink:0">
+        <button style="width:100%;padding:4px 8px;background:transparent;border:1px dashed #333;border-radius:3px;color:#555;font-size:11px;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer">
+          <span style="font-size:14px;line-height:1;color:#444">+</span>
+          Add Instance
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ══ CENTER: FLOOR CANVAS ══ -->
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;position:relative;background:#181818">
+
+      <!-- Canvas toolbar -->
+      <div style="height:30px;background:#222;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 10px;gap:2px;flex-shrink:0">
+        <!-- Floor / Prototype / Define tabs -->
+        <div style="display:flex;align-items:center;gap:1px;background:#2e2e2e;border:1px solid #0a0a0a;border-radius:3px;overflow:hidden;margin-right:10px">
+          <div style="padding:2px 10px;background:#3e7bbf;font-size:10px;color:#fff;font-weight:600">Floor</div>
+          <div style="padding:2px 10px;font-size:10px;color:#777;cursor:pointer">Prototype</div>
+          <div style="padding:2px 10px;font-size:10px;color:#777;cursor:pointer">Define</div>
+        </div>
+        <!-- Separator -->
+        <div style="width:1px;height:16px;background:#333;margin:0 6px"></div>
+        <!-- Tools -->
+        <div style="display:flex;align-items:center;gap:1px;background:#2e2e2e;border:1px solid #0a0a0a;border-radius:3px;overflow:hidden">
+          <div style="width:26px;height:22px;background:#3e7bbf;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Select">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="#fff"><path d="M3 2l10 5.5-5.5 1.5-1.5 5.5L3 2z"></path></svg>
+          </div>
+          <div style="width:26px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Move">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><path d="M8 2v12M2 8h12M5 5l3-3 3 3M5 11l3 3 3-3M5 5L2 8l3 3M11 5l3 3-3 3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+          <div style="width:26px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Rotate">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><path d="M13 8A5 5 0 1 1 5 3.5" stroke-linecap="round"></path><path d="M5 1v3h3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+        </div>
+        <div style="width:1px;height:16px;background:#333;margin:0 6px"></div>
+        <div style="display:flex;align-items:center;gap:1px;background:#2e2e2e;border:1px solid #0a0a0a;border-radius:3px;overflow:hidden">
+          <div style="width:26px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Focus selected">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><circle cx="8" cy="8" r="3"></circle><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke-linecap="round"></path></svg>
+          </div>
+          <div style="width:26px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Toggle grid">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#3e7bbf" stroke-width="1.2"><path d="M2 5h12M2 9h12M5 2v12M9 2v12"></path></svg>
+          </div>
+        </div>
+        <div style="flex:1"></div>
+        <span style="font-size:10px;color:#555">Scene</span>
+        <div style="display:flex;align-items:center;gap:1px;background:#2e2e2e;border:1px solid #0a0a0a;border-radius:3px;overflow:hidden;margin-left:6px">
+          <div style="padding:2px 8px;background:#3d3d3d;font-size:10px;color:#ccc;cursor:pointer">Scene</div>
+          <div style="padding:2px 8px;font-size:10px;color:#555;cursor:pointer">Data</div>
+        </div>
+        <!-- Zoom -->
+        <div style="display:flex;align-items:center;gap:4px;margin-left:10px">
+          <button style="width:18px;height:18px;background:#2e2e2e;border:1px solid #0a0a0a;border-radius:2px;color:#888;font-size:12px;display:flex;align-items:center;justify-content:center;padding:0">−</button>
+          <span style="font-size:10px;color:#666;min-width:30px;text-align:center">80%</span>
+          <button style="width:18px;height:18px;background:#2e2e2e;border:1px solid #0a0a0a;border-radius:2px;color:#888;font-size:12px;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+        </div>
+      </div>
+
+      <!-- Floor canvas -->
+      <div style="flex:1;overflow:hidden;position:relative;min-height:0">
+
+        <!-- Grid background -->
+        <svg width="100%" height="100%" style="position:absolute;top:0;left:0;pointer-events:none">
+          <defs>
+            <pattern id="smallgrid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#222" stroke-width="0.5"/>
+            </pattern>
+            <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+              <rect width="100" height="100" fill="url(#smallgrid)"/>
+              <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+
+        <!-- Floor plan content — positioned in canvas -->
+        <div style="position:absolute;top:0;left:0;width:100%;height:100%">
+
+          <!-- Area: Casting — dashed boundary -->
+          <div style="position:absolute;left:60px;top:40px;width:580px;height:380px;border:1.5px dashed #3a3a3a;border-radius:6px;background:rgba(255,255,255,0.01)">
+            <span style="position:absolute;top:6px;left:10px;font-size:9px;color:#444;text-transform:uppercase;letter-spacing:0.08em;font-weight:600">Casting</span>
+          </div>
+
+          <!-- Area: Machining — dashed boundary -->
+          <div style="position:absolute;left:680px;top:40px;width:380px;height:380px;border:1.5px dashed #3a3a3a;border-radius:6px;background:rgba(255,255,255,0.01)">
+            <span style="position:absolute;top:6px;left:10px;font-size:9px;color:#444;text-transform:uppercase;letter-spacing:0.08em;font-weight:600">Machining</span>
+          </div>
+
+          <!-- FURNACE_01 — SELECTED (green / active) -->
+          <div style="position:absolute;left:80px;top:100px;width:160px;height:120px;background:#1a2a1a;border:2px solid #3e7bbf;border-radius:4px;cursor:pointer;box-shadow:0 0 0 3px rgba(62,123,191,0.2)">
+            <!-- State bar -->
+            <div style="height:4px;background:#4ade80;border-radius:2px 2px 0 0"></div>
+            <div style="padding:8px 10px">
+              <div style="font-size:10px;font-weight:700;color:#ddd;letter-spacing:0.02em">FURNACE_01</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">LPDC · Smelting</div>
+              <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:9px;color:#666">Melt Temp</span>
+                  <span style="font-size:9px;color:#4ade80;font-family:monospace">755.3°C</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:9px;color:#666">Power</span>
+                  <span style="font-size:9px;color:#aaa;font-family:monospace">50.0 kW</span>
+                </div>
+              </div>
+              <div style="margin-top:8px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span>
+                <span style="font-size:9px;color:#4ade80">Active</span>
+                <span style="margin-left:auto;font-size:9px;color:#e07b39">⚠ 1 issue</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FURNACE_02 — maintenance (orange) -->
+          <div style="position:absolute;left:280px;top:100px;width:160px;height:120px;background:#1c1a15;border:1px solid #3a3a3a;border-radius:4px;cursor:pointer">
+            <div style="height:4px;background:#fb923c;border-radius:2px 2px 0 0"></div>
+            <div style="padding:8px 10px">
+              <div style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:0.02em">FURNACE_02</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">LPDC · Smelting</div>
+              <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:9px;color:#666">Melt Temp</span>
+                  <span style="font-size:9px;color:#aaa;font-family:monospace">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:9px;color:#666">Power</span>
+                  <span style="font-size:9px;color:#aaa;font-family:monospace">—</span>
+                </div>
+              </div>
+              <div style="margin-top:8px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#fb923c;display:inline-block"></span>
+                <span style="font-size:9px;color:#fb923c">Maintenance</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- LPDC_01 — active -->
+          <div style="position:absolute;left:80px;top:260px;width:140px;height:110px;background:#1a2a1a;border:1px solid #3a3a3a;border-radius:4px;cursor:pointer">
+            <div style="height:4px;background:#4ade80;border-radius:2px 2px 0 0"></div>
+            <div style="padding:7px 9px">
+              <div style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:0.02em">LPDC_01</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">LPDC · Casting</div>
+              <div style="margin-top:10px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span>
+                <span style="font-size:9px;color:#4ade80">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- LPDC_02 — active -->
+          <div style="position:absolute;left:250px;top:260px;width:140px;height:110px;background:#1a2a1a;border:1px solid #3a3a3a;border-radius:4px;cursor:pointer">
+            <div style="height:4px;background:#4ade80;border-radius:2px 2px 0 0"></div>
+            <div style="padding:7px 9px">
+              <div style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:0.02em">LPDC_02</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">LPDC · Casting</div>
+              <div style="margin-top:10px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span>
+                <span style="font-size:9px;color:#4ade80">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRIM_01 — idle -->
+          <div style="position:absolute;left:440px;top:100px;width:140px;height:100px;background:#1c1c18;border:1px solid #3a3a3a;border-radius:4px;cursor:pointer">
+            <div style="height:4px;background:#facc15;border-radius:2px 2px 0 0"></div>
+            <div style="padding:7px 9px">
+              <div style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:0.02em">TRIM_01</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">Trim Press</div>
+              <div style="margin-top:10px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#facc15;display:inline-block"></span>
+                <span style="font-size:9px;color:#facc15">Idle</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRIM_02 — no data -->
+          <div style="position:absolute;left:440px;top:230px;width:140px;height:100px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:4px;cursor:pointer;opacity:0.7">
+            <div style="height:4px;background:#6b7280;border-radius:2px 2px 0 0"></div>
+            <div style="padding:7px 9px">
+              <div style="font-size:10px;font-weight:700;color:#777;letter-spacing:0.02em">TRIM_02</div>
+              <div style="font-size:9px;color:#555;margin-top:1px">Trim Press</div>
+              <div style="margin-top:10px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#6b7280;display:inline-block"></span>
+                <span style="font-size:9px;color:#6b7280">No data</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Machining machines -->
+          <div style="position:absolute;left:700px;top:80px;width:130px;height:90px;background:#1a2a1a;border:1px solid #3a3a3a;border-radius:4px;cursor:pointer">
+            <div style="height:4px;background:#4ade80;border-radius:2px 2px 0 0"></div>
+            <div style="padding:7px 9px">
+              <div style="font-size:10px;font-weight:700;color:#bbb">CNC_01</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">CNC Lathe</div>
+              <div style="margin-top:8px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span>
+                <span style="font-size:9px;color:#4ade80">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:absolute;left:850px;top:80px;width:130px;height:90px;background:#1a2a1a;border:1px solid #3a3a3a;border-radius:4px;cursor:pointer">
+            <div style="height:4px;background:#4ade80;border-radius:2px 2px 0 0"></div>
+            <div style="padding:7px 9px">
+              <div style="font-size:10px;font-weight:700;color:#bbb">CNC_02</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">CNC Lathe</div>
+              <div style="margin-top:8px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span>
+                <span style="font-size:9px;color:#4ade80">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:absolute;left:700px;top:195px;width:130px;height:90px;background:#1c1a15;border:1px solid #3a3a3a;border-radius:4px;cursor:pointer">
+            <div style="height:4px;background:#f87171;border-radius:2px 2px 0 0"></div>
+            <div style="padding:7px 9px">
+              <div style="font-size:10px;font-weight:700;color:#bbb">DRILL_01</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">Drill Press</div>
+              <div style="margin-top:8px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#f87171;display:inline-block"></span>
+                <span style="font-size:9px;color:#f87171">Fault</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:absolute;left:850px;top:195px;width:130px;height:90px;background:#1c1c18;border:1px solid #3a3a3a;border-radius:4px;cursor:pointer">
+            <div style="height:4px;background:#facc15;border-radius:2px 2px 0 0"></div>
+            <div style="padding:7px 9px">
+              <div style="font-size:10px;font-weight:700;color:#bbb">DRILL_02</div>
+              <div style="font-size:9px;color:#888;margin-top:1px">Drill Press</div>
+              <div style="margin-top:8px;display:flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#facc15;display:inline-block"></span>
+                <span style="font-size:9px;color:#facc15">Idle</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- State legend -->
+          <div style="position:absolute;bottom:16px;left:20px;display:flex;align-items:center;gap:12px;background:rgba(20,20,20,0.85);padding:5px 10px;border-radius:4px;border:1px solid #2a2a2a">
+            <span style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.06em;margin-right:2px">State</span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span><span style="font-size:9px;color:#666">Active</span></span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:6px;height:6px;border-radius:50%;background:#facc15;display:inline-block"></span><span style="font-size:9px;color:#666">Idle</span></span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:6px;height:6px;border-radius:50%;background:#fb923c;display:inline-block"></span><span style="font-size:9px;color:#666">Maintenance</span></span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:6px;height:6px;border-radius:50%;background:#f87171;display:inline-block"></span><span style="font-size:9px;color:#666">Fault</span></span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:6px;height:6px;border-radius:50%;background:#6b7280;display:inline-block"></span><span style="font-size:9px;color:#666">No data</span></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Issues drawer -->
+      <div style="height:28px;background:#252525;border-top:1px solid #0a0a0a;display:flex;align-items:center;padding:0 10px;gap:10px;cursor:pointer;flex-shrink:0">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2z" stroke="#666" stroke-width="1.3" fill="rgba(100,100,100,0.1)"></path><path d="M8 7v3M8 11.5v.5" stroke="#666" stroke-width="1.4" stroke-linecap="round"></path></svg>
+        <span style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.06em">Issues</span>
+        <span style="font-size:10px;color:#555">▲</span>
+        <div style="display:flex;align-items:center;gap:8px;margin-left:4px">
+          <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#c85252;font-weight:600"><span style="width:5px;height:5px;border-radius:50%;background:#c85252;display:inline-block"></span>Type mismatch · Oil Level</span>
+          <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#e07b39;font-weight:600"><span style="width:5px;height:5px;border-radius:50%;background:#e07b39;display:inline-block"></span>Duplicate tag · Instant Power</span>
+        </div>
+        <div style="flex:1"></div>
+        <span style="font-size:10px;color:#555">click to expand</span>
+      </div>
+
+    </div><!-- end center -->
+
+    <!-- ══ RIGHT PANEL ══ -->
+    <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid #0a0a0a;background:#1d1d1d">
+
+      <!-- Selection header -->
+      <div style="height:26px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 8px;gap:6px;flex-shrink:0">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4ade80" stroke-width="1.3" fill="rgba(74,222,128,0.1)"></path></svg>
+        <span style="font-size:11px;color:#ddd;font-weight:500;flex:1">FURNACE_01</span>
+        <span style="font-size:9px;color:#555">instance of LPDC v3</span>
+      </div>
+
+      <!-- Tab strip: Properties | Mapping | Model | Overrides -->
+      <div style="display:flex;height:26px;border-bottom:1px solid #0a0a0a;flex-shrink:0;background:#1d1d1d">
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#60a5fa;border-bottom:2px solid #3e7bbf;cursor:pointer">Properties</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;color:#555;cursor:pointer">Mapping</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;color:#555;cursor:pointer">Model</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;color:#555;cursor:pointer">Overrides</div>
+      </div>
+
+      <!-- Properties content -->
+      <div style="flex:1;overflow-y:auto;min-height:0">
+
+        <!-- Section: Machine Metrics -->
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1">Machine Metrics</span>
+        </div>
+
+        <!-- Property rows -->
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111;background:#243040">
+          <div style="width:2px;height:14px;background:#3e7bbf;border-radius:1px;margin-right:7px;flex-shrink:0"></div>
+          <span style="flex:1;font-size:11px;color:#ddd;font-weight:500">Melt Bath Temp</span>
+          <span style="font-size:10px;color:#4ade80;font-family:monospace;margin-right:4px">755.3</span>
+          <span style="font-size:9px;color:#7a5e38">°C</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111">
+          <span style="flex:1;font-size:11px;color:#888">Zone Temperature</span>
+          <span style="font-size:10px;color:#aaa;font-family:monospace;margin-right:4px">744.5</span>
+          <span style="font-size:9px;color:#555">°C</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111">
+          <span style="flex:1;font-size:11px;color:#888">Furnace Pressure</span>
+          <span style="font-size:10px;color:#aaa;font-family:monospace;margin-right:4px">1.04</span>
+          <span style="font-size:9px;color:#555">bar</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111;background:rgba(200,82,82,0.05)">
+          <span style="flex:1;font-size:11px;color:#c88">Oil Level</span>
+          <span style="font-size:10px;color:#c88;font-family:monospace;margin-right:4px">12</span>
+          <span style="font-size:9px;color:#c85252">%</span>
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="margin-left:4px"><path d="M8 2L14 13H2L8 2z" stroke="#e07b39" stroke-width="1.3" fill="rgba(224,123,57,0.12)"></path><path d="M8 7v2M8 11v.5" stroke="#e07b39" stroke-width="1.4" stroke-linecap="round"></path></svg>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111">
+          <span style="flex:1;font-size:11px;color:#888">Vibration</span>
+          <span style="font-size:10px;color:#aaa;font-family:monospace;margin-right:4px">2.3</span>
+          <span style="font-size:9px;color:#555">mm/s</span>
+        </div>
+
+        <!-- Section: Energy Consumption -->
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;background:#252525;border-bottom:1px solid #111;border-top:2px solid #0a0a0a;position:sticky;top:0;z-index:1">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1">Energy Consumption</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111">
+          <span style="flex:1;font-size:11px;color:#888">Instant Power</span>
+          <span style="font-size:10px;color:#aaa;font-family:monospace;margin-right:4px">50.0</span>
+          <span style="font-size:9px;color:#555">kW</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111">
+          <span style="flex:1;font-size:11px;color:#888">Total Energy</span>
+          <span style="font-size:10px;color:#aaa;font-family:monospace;margin-right:4px">3547.8</span>
+          <span style="font-size:9px;color:#555">kWh</span>
+        </div>
+
+        <!-- Section: Status & Run Info -->
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;background:#252525;border-bottom:1px solid #111;border-top:2px solid #0a0a0a;position:sticky;top:0;z-index:1">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1">Status &amp; Run Info</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111">
+          <span style="flex:1;font-size:11px;color:#888">Progress</span>
+          <span style="font-size:10px;color:#aaa;font-family:monospace;margin-right:4px">49</span>
+          <span style="font-size:9px;color:#555">%</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;height:22px;border-bottom:1px solid #111">
+          <span style="flex:1;font-size:11px;color:#888">Total Runtime</span>
+          <span style="font-size:10px;color:#aaa;font-family:monospace;margin-right:4px">3547.8</span>
+          <span style="font-size:9px;color:#555">hrs</span>
+        </div>
+
+        <!-- Position / Transform info -->
+        <div style="padding:8px;border-top:2px solid #0a0a0a">
+          <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px">Transform</div>
+          <div style="display:flex;gap:6px">
+            <div style="flex:1">
+              <div style="font-size:9px;color:#555;margin-bottom:2px">X</div>
+              <div style="height:20px;background:#141414;border:1px solid #2a2a2a;border-radius:2px;padding:0 6px;font-size:10px;color:#888;display:flex;align-items:center;font-family:monospace">80</div>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:9px;color:#555;margin-bottom:2px">Y</div>
+              <div style="height:20px;background:#141414;border:1px solid #2a2a2a;border-radius:2px;padding:0 6px;font-size:10px;color:#888;display:flex;align-items:center;font-family:monospace">100</div>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:9px;color:#555;margin-bottom:2px">Rot</div>
+              <div style="height:20px;background:#141414;border:1px solid #2a2a2a;border-radius:2px;padding:0 6px;font-size:10px;color:#888;display:flex;align-items:center;font-family:monospace">0°</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom: Quick actions for selected machine -->
+      <div style="border-top:1px solid #0a0a0a;padding:6px 8px;display:flex;gap:5px;flex-shrink:0;background:#1d1d1d">
+        <button style="flex:1;padding:4px 6px;background:transparent;border:1px solid #2e2e2e;border-radius:3px;color:#888;font-size:10px;cursor:pointer">Open Define</button>
+        <button style="flex:1;padding:4px 6px;background:transparent;border:1px solid #2e2e2e;border-radius:3px;color:#888;font-size:10px;cursor:pointer">Duplicate</button>
+        <button style="width:26px;padding:4px;background:transparent;border:1px solid #2e2e2e;border-radius:3px;color:#888;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.5"><path d="M3 3h10M6 3V2h4v1M6 13V6M10 13V6M4 5l1 8h6l1-8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+      </div>
+
+    </div><!-- end right panel -->
+
+  </div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

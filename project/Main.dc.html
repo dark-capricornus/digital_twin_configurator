@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Main App Screen — Digital Twin Configurator</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;background:#1d1d1d;color:#cccccc}
+*{box-sizing:border-box}
+button{cursor:pointer;font-family:inherit}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#1d1d1d}
+::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:2px}
+a{color:#4772b3}
+</style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; background: #1d1d1d; overflow: hidden; font-size: 12px; height: 100%; width: 100%">
+
+  <!-- ══ TOPBAR ══ -->
+  <div style="height: 28px; background: #1a1a1a; border-bottom: 1px solid #0a0a0a; display: flex; align-items: center; flex-shrink: 0; width: 100%">
+    <div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-right:1px solid #0a0a0a;flex-shrink:0">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4772b3" stroke-width="1.4" fill="rgba(71,114,179,0.15)"></path><path d="M8 5l4 2.5v2.5L8 12.5 4 10V7.5L8 5z" fill="#4772b3" opacity="0.6"></path></svg>
+    </div>
+    <div style="display:flex;align-items:center;height:100%">
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">File</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">Edit</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">View</span>
+    </div>
+    <!-- workspace mode tabs -->
+    <div style="display:flex;align-items:stretch;height:100%;padding:0 2px;gap:2px;margin-left:8px">
+      <div style="padding:0 14px;display:flex;align-items:center;background:#3e7bbf;color:#fff;font-size:12px;font-weight:600;border-radius:3px 3px 0 0;cursor:pointer">Build</div>
+      
+      <div style="padding:0 14px;display:flex;align-items:center;background:#2a2a2a;color:#888;font-size:12px;border-radius:3px 3px 0 0;cursor:pointer">Client View</div>
+      
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:6px;padding:0 10px">
+      <div style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;color:#e07b39;font-size:11px;font-weight:600">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2z" stroke="#e07b39" stroke-width="1.3" fill="rgba(224,123,57,0.12)"></path><path d="M8 7v3M8 11.5v.5" stroke="#e07b39" stroke-width="1.5" stroke-linecap="round"></path></svg>
+        2 Issues
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;color:#70b170;font-size:11px;font-weight:600">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#70b170" stroke-width="1.8"><path d="M8 12V4M4 7l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        1 Update
+      </div>
+      <div style="width:1px;height:16px;background:#3a3a3a;margin:0 2px"></div>
+      <button style="padding:3px 12px;background:#3e7bbf;border:1px solid #0a0a0a;border-radius:3px;color:#fff;font-size:12px;font-weight:600">Publish</button>
+      <div style="width:1px;height:16px;background:#3a3a3a"></div>
+      <button style="width:24px;height:24px;background:transparent;border:none;color:#888;display:flex;align-items:center;justify-content:center">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.4"><circle cx="8" cy="8" r="2.5"></circle><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"></path></svg>
+      </button>
+      <div style="width:22px;height:22px;border-radius:50%;background:#3e7bbf;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;cursor:pointer">P</div>
+    </div>
+  </div><div style="flex: 1; display: flex; overflow: hidden; min-height: 0; width: 100%; height: 100%">
+
+    <!-- LEFT TOOL STRIP -->
+    <div style="width:28px;flex-shrink:0;background:#2a2a2a;border-right:1px solid #0a0a0a;display:flex;flex-direction:column;align-items:center;padding:4px 0;gap:2px;overflow:hidden">
+      <div style="width:22px;height:22px;background:#3e7bbf;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Select">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="#fff"><path d="M3 2l10 5.5-5.5 1.5-1.5 5.5L3 2z"></path></svg>
+      </div>
+      <div style="width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Move">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><path d="M8 2v12M2 8h12M5 5l3-3 3 3M5 11l3 3 3-3M5 5L2 8l3 3M11 5l3 3-3 3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <div style="width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Rotate">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><path d="M13 8A5 5 0 1 1 5 3.5" stroke-linecap="round"></path><path d="M5 1v3h3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <div style="width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Focus">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><circle cx="8" cy="8" r="3"></circle><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke-linecap="round"></path></svg>
+      </div>
+      <div style="height:1px;width:18px;background:#3a3a3a;margin:3px 0"></div>
+      <div style="width:22px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center" title="Add Block / Template">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"></rect><path d="M8 5v6M5 8h6" stroke-linecap="round"></path></svg>
+      </div>
+      <div style="flex:1"></div>
+      
+    </div>
+
+    <!-- ══ 3D VIEWPORT ══ -->
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;position:relative">
+      <!-- viewport header -->
+      <div style="height:26px;background:#2a2a2a;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 6px;gap:4px;flex-shrink:0">
+        
+        
+        
+        
+        
+        
+        
+        
+        <div style="display:flex;align-items:center;gap:2px;padding:2px 8px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px">
+          <span style="font-size:10px;color:#888">Plant</span>
+          <span style="font-size:9px;color:#555;margin:0 3px">⇌</span>
+          <span style="font-size:10px;color:#fff;font-weight:600">Machine</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:1px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;overflow:hidden">
+          <div style="padding:2px 8px;font-size:10px;color:#888">Floor</div>
+          <div style="padding:2px 8px;font-size:10px;color:#888">Prototype</div>
+          <div style="padding:2px 8px;background:#3e7bbf;font-size:10px;color:#fff;font-weight:600">Define</div>
+        </div>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:2px">
+          <div style="padding:2px 6px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;cursor:pointer">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" fill="#555"></circle><path d="M8 2a6 6 0 0 1 0 12" fill="#888"></path></svg>
+          </div>
+          <div style="padding:2px 6px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:3px;cursor:pointer">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.3"><rect x="2" y="2" width="5" height="5" rx="1"></rect><rect x="9" y="2" width="5" height="5" rx="1"></rect><rect x="2" y="9" width="5" height="5" rx="1"></rect><rect x="9" y="9" width="5" height="5" rx="1"></rect></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D CANVAS -->
+      <div style="flex:1;background:#1d1d1d;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:0">
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:48px 48px"></div>
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:12px 12px"></div>
+        <div style="position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(76,107,179,0.3)"></div>
+        <div style="position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(76,107,179,0.15)"></div>
+
+        <div style="position:absolute;bottom:60px;left:50%;transform:translateX(-45%) perspective(900px) rotateX(62deg);width:700px;height:360px;border:1px solid rgba(255,255,255,0.05);border-radius:2px;pointer-events:none"></div>
+
+        <!-- FURNACE_01 selected — orange outline like Blender -->
+        <div style="position:absolute;left:240px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div style="width:82px;height:60px;background:linear-gradient(160deg,#2e2e2e,#222);border:2px solid #e07b39;border-radius:4px;box-shadow:0 0 0 1px rgba(224,123,57,0.3),0 8px 20px rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;position:relative">
+            <div style="width:10px;height:10px;border-radius:50%;background:#70b170;box-shadow:0 0 8px #70b170"></div>
+            <div style="position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:5px;height:5px;background:#e07b39;border-radius:50%"></div>
+          </div>
+          <div style="font-size:10px;font-weight:600;color:#ccc;text-transform:uppercase;letter-spacing:0.06em">FURNACE_01</div>
+        </div>
+        <div style="position:absolute;left:355px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div style="width:72px;height:52px;background:linear-gradient(160deg,#282828,#1e1e1e);border:1px solid #3a3a3a;border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;position:relative">
+            <div style="width:8px;height:8px;border-radius:50%;background:#70b170;box-shadow:0 0 6px #70b170"></div>
+            <div style="position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#888;border-radius:50%"></div>
+          </div>
+          <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.06em">FURNACE_02</div>
+        </div>
+        <div style="position:absolute;left:465px;bottom:100px;display:flex;gap:16px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:64px;height:48px;background:linear-gradient(160deg,#282828,#1e1e1e);border:1px solid #3a3a3a;border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;position:relative">
+              <div style="width:7px;height:7px;border-radius:50%;background:#c4a836;box-shadow:0 0 6px #c4a836"></div>
+              <div style="position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#888;border-radius:50%"></div>
+            </div>
+            <div style="font-size:9px;color:#666;text-transform:uppercase;letter-spacing:0.05em">LPDC_01</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:64px;height:48px;background:linear-gradient(160deg,#282828,#1e1e1e);border:1px solid #3a3a3a;border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;position:relative">
+              <div style="width:7px;height:7px;border-radius:50%;background:#70b170;box-shadow:0 0 6px #70b170"></div>
+              <div style="position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#888;border-radius:50%"></div>
+            </div>
+            <div style="font-size:9px;color:#666;text-transform:uppercase;letter-spacing:0.05em">LPDC_02</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:64px;height:48px;background:linear-gradient(160deg,#282828,#1e1e1e);border:1px solid #3a3a3a;border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;position:relative">
+              <div style="width:7px;height:7px;border-radius:50%;background:#c87237;box-shadow:0 0 6px #c87237"></div>
+              <div style="position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#888;border-radius:50%"></div>
+            </div>
+            <div style="font-size:9px;color:#666;text-transform:uppercase;letter-spacing:0.05em">LPDC_03</div>
+          </div>
+        </div>
+
+        <div style="position:absolute;left:198px;bottom:180px;font-size:9px;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.1em;font-weight:600">Smelting</div>
+        <div style="position:absolute;left:440px;bottom:180px;font-size:9px;color:rgba(255,255,255,0.18);text-transform:uppercase;letter-spacing:0.1em;font-weight:600">Casting (LPDC)</div>
+
+        <!-- Gizmo -->
+        <div style="position:absolute;top:12px;right:16px;width:68px;height:68px">
+          <div style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.25)"></div>
+          <div style="position:absolute;left:50%;top:8px;width:2px;height:22px;background:#5b8fd4;border-radius:1px;transform:translateX(-50%)"></div>
+          <div style="position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:#5b8fd4">Z</div>
+          <div style="position:absolute;top:50%;right:8px;height:2px;width:22px;background:#c85252;border-radius:1px;transform:translateY(-50%)"></div>
+          <div style="position:absolute;top:50%;right:2px;transform:translateY(-50%);font-size:9px;font-weight:700;color:#c85252">X</div>
+          <div style="position:absolute;top:50%;left:50%;width:16px;height:2px;background:#70b170;border-radius:1px;transform-origin:left center;transform:rotate(225deg)"></div>
+          <div style="position:absolute;bottom:6px;left:6px;font-size:9px;font-weight:700;color:#70b170">Y</div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:#aaa"></div>
+        </div>
+
+        <div style="position:absolute;bottom:8px;left:8px;font-size:10px;color:rgba(255,255,255,0.2)">Verts:21 · Faces:18 · Objects:5</div>
+        <div style="position:absolute;bottom:8px;right:8px;display:flex;flex-direction:column;gap:1px">
+          <button style="width:22px;height:22px;background:rgba(42,42,42,0.85);border:1px solid #0a0a0a;border-radius:3px;color:#888;font-size:13px;font-weight:300;display:flex;align-items:center;justify-content:center">+</button>
+          <button style="width:22px;height:22px;background:rgba(42,42,42,0.85);border:1px solid #0a0a0a;border-radius:3px;color:#888;font-size:13px;font-weight:300;display:flex;align-items:center;justify-content:center">−</button>
+        </div>
+
+        <!-- Issues strip -->
+        <div style="position:absolute;bottom:0;left:0;right:0;height:28px;background:#252525;border-top:1px solid #0a0a0a;display:flex;align-items:center;padding:0 10px;gap:10px;cursor:pointer">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2z" stroke="#666" stroke-width="1.3" fill="rgba(100,100,100,0.1)"></path><path d="M8 7v3M8 11.5v.5" stroke="#666" stroke-width="1.4" stroke-linecap="round"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.06em">Issues</span>
+          <span style="font-size:10px;color:#555">▲</span>
+          <div style="display:flex;align-items:center;gap:8px;margin-left:4px">
+            <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#c85252;font-weight:600"><span style="width:5px;height:5px;border-radius:50%;background:#c85252;display:inline-block"></span>1 fault</span>
+            <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#e07b39;font-weight:600"><span style="width:5px;height:5px;border-radius:50%;background:#e07b39;display:inline-block"></span>1 warning</span>
+          </div>
+          <div style="flex:1"></div>
+          <span style="font-size:10px;color:#555">click to expand</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ RIGHT PANEL ══ -->
+    <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid #0a0a0a;background:#1d1d1d">
+
+      <!-- TOP: Plant Hierarchy / Outliner -->
+      <div style="height:240px;flex-shrink:0;background:#1d1d1d;border-bottom:4px solid #0a0a0a;display:flex;flex-direction:column;overflow:hidden">
+        <div style="height:24px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 6px;gap:4px;flex-shrink:0">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="2" fill="#888" rx="1"></rect><rect x="2" y="7" width="9" height="2" fill="#888" rx="1"></rect><rect x="2" y="11" width="6" height="2" fill="#888" rx="1"></rect></svg>
+          <span style="font-size:11px;color:#ccc;flex:1">Plant Hierarchy</span>
+          <div style="display:flex;gap:2px">
+            <button style="padding:1px 6px;background:#3d3d3d;border:1px solid #0a0a0a;border-radius:2px;color:#ccc;font-size:10px">Hierarchy</button>
+            <button style="padding:1px 6px;background:transparent;border:1px solid transparent;border-radius:2px;color:#555;font-size:10px">Library</button>
+          </div>
+        </div>
+        <div style="padding:3px 5px;background:#252525;border-bottom:1px solid #0a0a0a;flex-shrink:0">
+          <div style="background:#1d1d1d;border:1px solid #0a0a0a;border-radius:3px;padding:3px 6px;display:flex;align-items:center;gap:5px">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="2"><circle cx="7" cy="7" r="5"></circle><path d="M12 12l2.5 2.5"></path></svg>
+            <span style="font-size:11px;color:#444">Filter...</span>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:2px 0">
+          <!-- All rows: fixed right-icon block (30px) ensures icons align regardless of indent -->
+          <!-- Root: Alloy Wheel Mfg -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#ccc;font-size:11px;height:20px">
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0;margin-right:4px"><path d="M2 3l4 4 4-4H2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><rect x="2" y="5" width="12" height="9" rx="2"></rect><path d="M5 5V3a3 3 0 0 1 6 0v2" stroke-linecap="round"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Alloy Wheel Mfg</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4" title="View"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- Smelting zone — indent level 1 -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#ccc;font-size:11px;height:20px">
+            <div style="width:12px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0;margin-right:4px"><path d="M2 3l4 4 4-4H2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Smelting</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4" title="View"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- FURNACE_01 selected — template applied, data mapped — indent level 2 -->
+          <div style="display:flex;align-items:center;padding:0 6px;background:#3e7bbf;font-size:11px;height:20px">
+            <div style="width:24px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="none" style="flex-shrink:0;margin-right:4px"><rect x="1" y="1" width="8" height="8" rx="1" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"></rect></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="rgba(255,255,255,0.6)" style="flex-shrink:0;margin-right:4px"><rect x="3" y="3" width="10" height="10" rx="2"></rect></svg>
+            <span style="flex:1;color:#fff;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">FURNACE_01</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.4" title="View"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- FURNACE_02 — indent level 2 -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#aaa;font-size:11px;height:20px">
+            <div style="width:24px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="none" style="flex-shrink:0;margin-right:4px"><rect x="1" y="1" width="8" height="8" rx="1" fill="none" stroke="#555" stroke-width="1"></rect></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="#666" style="flex-shrink:0;margin-right:4px"><rect x="3" y="3" width="10" height="10" rx="2"></rect></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">FURNACE_02</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4" title="View"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- Casting (LPDC) — indent level 1 -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#aaa;font-size:11px;height:20px">
+            <div style="width:12px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#666" style="flex-shrink:0;margin-right:4px"><path d="M3 2l4 4-4 4V2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Casting (LPDC)</span>
+            <span style="font-size:9px;color:#555;margin-right:4px;flex-shrink:0">3</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4" title="View"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- Machining — indent level 1 -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#aaa;font-size:11px;height:20px">
+            <div style="width:12px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#666" style="flex-shrink:0;margin-right:4px"><path d="M3 2l4 4-4 4V2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Machining</span>
+            <span style="font-size:9px;color:#555;margin-right:4px;flex-shrink:0">5</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4" title="View"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+          <!-- Heat Treatment — indent level 1 -->
+          <div style="display:flex;align-items:center;padding:0 6px;color:#aaa;font-size:11px;height:20px">
+            <div style="width:12px;flex-shrink:0"></div>
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="#666" style="flex-shrink:0;margin-right:4px"><path d="M3 2l4 4-4 4V2z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.3" style="flex-shrink:0;margin-right:4px"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Heat Treatment</span>
+            <div style="display:flex;gap:4px;align-items:center;width:30px;justify-content:flex-end;flex-shrink:0">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="1.4" title="View"><circle cx="8" cy="8" r="2.5"></circle><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BOTTOM: PROPERTY DEFINITION EDITOR ══ -->
+      <div style="flex:1;display:flex;min-height:0;overflow:hidden">
+
+        <!-- Icon tab strip — Properties / Mapping / Model / Overrides -->
+        <div style="width:26px;background:#252525;border-right:1px solid #0a0a0a;display:flex;flex-direction:column;align-items:center;padding:3px 0;gap:1px;flex-shrink:0">
+          <div style="width:22px;height:22px;background:#3e7bbf;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Properties">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"></rect><rect x="9" y="2" width="5" height="5" rx="1"></rect><rect x="2" y="9" width="5" height="5" rx="1"></rect><rect x="9" y="9" width="5" height="5" rx="1"></rect></svg>
+          </div>
+          <div style="width:22px;height:22px;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Mapping">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.4"><path d="M2 8h12M8 2v12M5 5l6 6M11 5l-6 6"></path></svg>
+          </div>
+          <div style="width:22px;height:22px;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;cursor:pointer" title="Model">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.4"><path d="M8 2l5 3v5l-5 3-5-3V5L8 2z"></path></svg>
+          </div>
+        </div>
+
+        <!-- Properties definition panel -->
+        <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #1d1d1d; height: 545px">
+
+          <!-- Panel header: machine name + template state -->
+          <div style="height:24px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 8px;gap:6px;flex-shrink:0">
+            
+            <span style="font-size:11px;color:#ccc;flex:1">FURNACE_01</span>
+            <button style="display:flex;align-items:center;gap:4px;background:transparent;border:1px dashed #444;border-radius:2px;padding:1px 6px;cursor:pointer;height:16px;color:#777;font-size:9px;white-space:nowrap">
+              <svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#666" stroke-width="1.4"><rect x="3" y="2" width="10" height="7" rx="1"></rect><rect x="5" y="12" width="6" height="2" rx="1" fill="#666" stroke="none"></rect><path d="M6 9v3M10 9v3" stroke-linecap="round"></path><path d="M8 4v3M6.5 5.5h3" stroke-linecap="round" stroke="#a0c4f0"></path></svg>
+              Create Template
+            </button>
+          </div>
+
+          <!-- Definition body -->
+          <div style="flex:1;overflow-y:auto">
+
+            <!-- ══ SECTION: Machine Metrics ══ -->
+            <!-- Section header — bold label left, + right, like Claude Design "Size +" -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 24px; background: #252525; border-bottom: 1px solid #111; position: sticky; top: 0; z-index: 1; cursor: pointer; gap: 2px"><svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right: 0px; flex-shrink: 0; width: 8px; height: 8px; position: relative; left: -2px"><path d="M2 3l4 4 4-4H2z" stroke-linecap="round"></path></svg>
+              <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Machine Metrics</span>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- Melt Bath Temp — SELECTED / EXPANDED (up chevron right = can collapse) -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 22px; background: #243040; border-bottom: 1px solid #111; cursor: pointer; justify-content: space-between"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><div style="width:2px;height:14px;background:#3e7bbf;border-radius:1px;margin-right:7px;flex-shrink:0"></div><div style="margin-right: 6px; height: 18px; background: #161c24; border: 1px solid #2a3444; border-radius: 2px; padding: 0 6px; font-size: 10px; color: #ddd; display: flex; align-items: center">Melt Bath Temp</div></div>
+              
+              <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: 8px; justify-content: space-between; align-items: center"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: 6px; justify-content: space-between; align-items: center"><div style="padding: 0 8px; font-size: 10px; color: #777; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px">Overridable</div><div style="width:22px;height:11px;background:#3e7bbf;border-radius:6px;flex-shrink:0;position:relative"><div style="position:absolute;right:2px;top:1.5px;width:8px;height:8px;background:#fff;border-radius:50%"></div></div></div><svg width="8" height="8" viewBox="0 0 10 10" fill="#666" style="flex-shrink: 0; position: relative; left: 2px" title="Click to collapse"><path d="M2 7l3-4 3 4H2z"></path></svg><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+            </div>
+
+            <!-- Expanded definition — Claude Design panel style: tight 22px rows, 62px label col -->
+            <div style="background:#1e2530;border-bottom:2px solid #111">
+              <!-- Name -->
+              
+              <!-- Type — primary dropdown -->
+              <div style="display: flex; grid-template-columns: 62px 1fr; align-items: center; height: 22px; border-top-width: 0px; border-bottom-width: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 8px; padding-left: 18px; gap: 4px">
+                <div style="padding: 0 8px; font-size: 10px; color: #777; width: 160px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px">Value Type</div>
+                <div style="height: 18px; background: #161c24; border: 1px solid #2a3444; border-radius: 2px; padding: 0 6px; font-size: 10px; color: #bbb; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 4px; padding-right: 4px; padding-left: 4px; width: 100%">
+                  <span style="width: 100%; text-align: left">Float</span>
+                  <svg width="7" height="7" viewBox="0 0 10 10" fill="#555" style="width: 8px; height: 8px"><path d="M2 3l3 4 3-4H2z"></path></svg>
+                </div>
+              </div><div style="display: flex; grid-template-columns: 62px 1fr; align-items: center; height: 22px; border-top-width: 0px; border-bottom-width: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 8px; padding-left: 18px; gap: 4px">
+                <div style="padding: 0 8px; font-size: 10px; color: #777; width: 160px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px">Unit</div>
+                <div style="height: 18px; background: #161c24; border: 1px solid #2a3444; border-radius: 2px; padding: 0 6px; font-size: 10px; color: #bbb; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 4px; padding-right: 4px; padding-left: 4px; width: 100%">
+                  <span style="width: 100%; text-align: left"><span style="color: rgb(200, 122, 58); text-align: start">°C</span></span>
+                  <svg width="7" height="7" viewBox="0 0 10 10" fill="#555" style="width: 8px; height: 8px"><path d="M2 3l3 4 3-4H2z"></path></svg>
+                </div>
+              </div>
+              <!-- Unit -->
+              
+              <!-- Overridable — toggle -->
+              
+              <!-- Alarms sub-section header (nested section, like "Padding > Per side") -->
+              <div style="display: flex; align-items: center; padding: 0 8px; border-top-width: 0px; border-top-style: solid; border-top-color: #111; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: #111; cursor: pointer; padding-top: 8px; padding-bottom: 8px; padding-right: 8px; padding-left: 8px; position: relative; justify-content: space-between; flex-direction: column">
+                <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: space-between; align-items: center; width: 100%; padding-left: 0px; padding-bottom: 2px"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: 0px; justify-content: space-between; align-items: center"><svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right: 4px; flex-shrink: 0; position: relative; left: -2px"><path d="M2 3l4 4 4-4H2z"></path></svg><span style="font-size: 11px">Alarms</span></div><svg width="181" height="8" viewBox="0 0 181 8" preserveAspectRatio="none" style="position: static; width: 181px; height: 8px; overflow: visible; fill: none; stroke: #444444; stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; left: 0px; top: 0px"><path d="M -0.11 4 L 181.11 4"></path></svg></div><div style="display: flex; grid-template-columns: 62px 1fr; align-items: center; height: 22px; border-top-width: 0px; border-bottom-width: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px; padding-left: 10px; gap: 4px; width: 100%">
+                
+                <div style="padding: 0 8px; font-size: 10px; color: #777; display: flex; align-items: center; gap: 3px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; width: 72px">
+                  <span style="width:5px;height:5px;border-radius:50%;background:#e07b39;flex-shrink:0"></span>Warning
+                </div><div style="flex: 1; height: 18px; background: #161c24; border: 1px solid #2a3444; border-radius: 2px; padding: 0 6px; font-size: 10px; color: #e07b39; display: flex; align-items: center">780</div><div style="width: 26px; height: 18px; background: #161c24; border: 1px solid #2a3444; border-radius: 2px; font-size: 9px; color: #555; display: flex; align-items: center; justify-content: center">°C</div>
+              </div><div style="display: flex; grid-template-columns: 62px 1fr; align-items: center; height: 22px; border-top-width: 0px; border-bottom-width: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px; padding-left: 10px; gap: 4px; width: 100%">
+                
+                <div style="padding: 0 8px; font-size: 10px; color: #777; display: flex; align-items: center; gap: 3px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; width: 72px">
+                  <span style="width:5px;height:5px;border-radius:50%;background:#c85252;flex-shrink:0"></span>Critical
+                </div><div style="flex: 1; height: 18px; background: #161c24; border: 1px solid #2a3444; border-radius: 2px; padding: 0 6px; font-size: 10px; color: #e07b39; display: flex; align-items: center">780</div><div style="width: 26px; height: 18px; background: #161c24; border: 1px solid #2a3444; border-radius: 2px; font-size: 9px; color: #555; display: flex; align-items: center; justify-content: center">°C</div>
+              </div>
+                
+                
+              </div>
+              <!-- Warning — value + unit, two chips like padding 4-input pattern -->
+              
+              <!-- Critical -->
+              
+            </div>
+
+            <!-- Zone Temperature — collapsed property row -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 22px; border-bottom: 1px solid #111; cursor: pointer"><span style="flex:1;font-size:11px;color:#888">Zone Temperature</span>
+              <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><span style="font-size: 10px; color: #555; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 3px; width: 42px; text-align: right">Float</span><span style="font-size: 10px; color: #6a4e28; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 4px; width: 36px; text-align: left">°C</span></div></div>
+              
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- Process Temperature -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 22px; border-bottom: 1px solid #111; cursor: pointer"><span style="flex:1;font-size:11px;color:#888">Process Temperature</span>
+              <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><span style="font-size: 10px; color: #555; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 3px; width: 42px; text-align: right">Float</span><span style="font-size: 10px; color: #6a4e28; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 4px; width: 36px; text-align: left">°C</span></div></div>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- Oil Level -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 22px; border-bottom: 1px solid #111; cursor: pointer"><span style="flex:1;font-size:11px;color:#888">Oil Level</span>
+              <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><span style="font-size: 10px; color: #555; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 3px; width: 42px; text-align: right">Float</span><span style="font-size: 10px; color: #6a4e28; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 4px; width: 36px; text-align: left">%</span></div></div>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- Furnace Pressure -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 22px; border-bottom: 1px solid #111; cursor: pointer"><span style="flex:1;font-size:11px;color:#888">Furnace Pressure</span>
+              <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><span style="font-size: 10px; color: #555; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 3px; width: 42px; text-align: right">Float</span><span style="font-size: 10px; color: #6a4e28; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 4px; width: 36px; text-align: left">bar</span></div></div>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- Vibration -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 22px; border-bottom: 1px solid #111; cursor: pointer"><span style="flex:1;font-size:11px;color:#888">Vibration</span>
+              <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><span style="font-size: 10px; color: #555; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 3px; width: 42px; text-align: right">Float</span><span style="font-size: 10px; color: #6a4e28; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 4px; width: 36px; text-align: left">mm/s</span></div></div>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- ══ SECTION: Energy Consumption ══ -->
+            <div style="display:flex;align-items:center;padding:0 8px;height:24px;background:#252525;border-bottom:1px solid #111;border-top:2px solid #0a0a0a;position:sticky;top:0;z-index:1;cursor:pointer"><svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right: 5px; flex-shrink: 0; position: relative; left: -2px"><path d="M2 3l4 4 4-4H2z"></path></svg>
+              <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Energy Consumption</span>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+            <!-- Instant Power -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 22px; border-bottom: 1px solid #111; cursor: pointer"><span style="flex:1;font-size:11px;color:#888">Instant Power</span>
+              <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><span style="font-size: 10px; color: #555; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 3px; width: 42px; text-align: right">Float</span><span style="font-size: 10px; color: #6a4e28; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 4px; width: 36px; text-align: left">kW</span></div></div>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+            <!-- Total Energy -->
+            <div style="display: flex; align-items: center; padding: 0 8px; height: 22px; border-bottom: 1px solid #111; cursor: pointer"><span style="flex:1;font-size:11px;color:#888">Total Energy</span>
+              <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: row; gap: normal; justify-content: normal; align-items: center"><span style="font-size: 10px; color: #555; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 3px; width: 42px; text-align: right">Float</span><span style="font-size: 10px; color: #6a4e28; border-radius: 2px; padding: 0 4px; height: 16px; line-height: 16px; margin-right: 4px; width: 36px; text-align: left">kWh</span></div></div>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- ══ SECTION: Production Data (collapsed) ══ -->
+            <div style="display:flex;align-items:center;padding:0 8px;height:24px;background:#252525;border-bottom:1px solid #111;border-top:2px solid #0a0a0a;position:sticky;top:0;z-index:1;cursor:pointer"><svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+              <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Production Data</span>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- ══ SECTION: Status & Run Info (collapsed) ══ -->
+            <div style="display:flex;align-items:center;padding:0 8px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer"><svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+              <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Status &amp; Run Info</span>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- ══ SECTION: Alarms (collapsed) ══ -->
+            <div style="display:flex;align-items:center;padding:0 8px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer"><svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+              <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Alarms</span>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- ══ SECTION: Maintenance (collapsed) ══ -->
+            <div style="display:flex;align-items:center;padding:0 8px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer"><svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+              <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Maintenance</span>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- ══ SECTION: Asset Info (collapsed) ══ -->
+            <div style="display:flex;align-items:center;padding:0 8px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer"><svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+              <span style="font-size:11px;font-weight:600;color:#ccc;flex:1;letter-spacing:0.01em">Asset Info</span>
+              <button style="width:16px;height:16px;background:transparent;border:none;color:#666;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button><svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg></div>
+
+            <!-- Add Section -->
+            <div style="padding:6px 8px;border-top:2px solid #0a0a0a">
+              <button style="width:100%;padding:5px 8px;background:transparent;border:1px dashed #333;border-radius:3px;color:#555;font-size:11px;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer">
+                <span style="font-size:14px;line-height:1;color:#444">+</span>
+                Add Section
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end right panel -->
+
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

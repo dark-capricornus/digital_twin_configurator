@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New Plant Package</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+:root{
+  --color-blue:#3e7bbf;
+  --color-blue-light:#60a5fa;
+  --color-green:#4ade80;
+  --color-yellow:#facc15;
+  --color-var:#CD6FB8;
+  --bg-topbar:#1a1a1a;
+  --bg-panel:#1d1d1d;
+  --bg-canvas:#181818;
+  --bg-section:#252525;
+}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;background:#1d1d1d;color:#ccc}
+*{box-sizing:border-box}
+button{cursor:pointer;font-family:inherit}
+input,select{font-family:inherit;font-size:11px;background:#161c24;border:1px solid #2a3444;border-radius:2px;color:#ddd;outline:none}
+input:focus,select:focus{border-color:#3e7bbf}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#1d1d1d}
+::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:2px}
+.opt-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:4px;border:1px solid #252525;background:#1d1d1d;cursor:pointer;transition:background .12s,border-color .12s;position:relative}
+.opt-card:hover{background:#222;border-color:#333}
+.opt-card.selected{background:#192030;border-color:#3e7bbf;border-left:3px solid #3e7bbf}
+.opt-card.selected-green{background:#18231a;border-color:#4ade80;border-left:3px solid #4ade80}
+.opt-card.selected-yellow{background:#221e12;border-color:#facc15;border-left:3px solid #facc15}
+.opt-card.selected-purple{background:#1e1626;border-color:#CD6FB8;border-left:3px solid #CD6FB8}
+.opt-icon{width:38px;height:38px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.field-row{display:flex;flex-direction:column;gap:4px}
+.field-label{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.06em}
+.field-input{height:26px;padding:0 9px;width:100%}
+.drop-zone{border:1.5px dashed #333;border-radius:5px;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:#161616;cursor:pointer}
+.drop-zone:hover{border-color:#444;background:#1a1a1a}
+.fmt-chip{font-size:9px;padding:3px 8px;border-radius:2px;border:1px solid #2a2a2a;background:#1a1a1a;color:#666;cursor:pointer}
+.fmt-chip.active{border-color:#CD6FB8;color:#CD6FB8;background:rgba(205,111,184,.08)}
+.cta-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 18px;border-radius:3px;border:none;font-size:11px;font-weight:600;cursor:pointer;width:100%}
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;height:100%;width:100%;background:#1d1d1d;overflow:hidden;font-size:12px">
+
+  <!-- ══ TOPBAR ══ -->
+  <div style="height:28px;background:#1a1a1a;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;flex-shrink:0;width:100%">
+    <div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-right:1px solid #0a0a0a;flex-shrink:0">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4772b3" stroke-width="1.4" fill="rgba(71,114,179,0.15)"/><path d="M8 5l4 2.5v2.5L8 12.5 4 10V7.5L8 5z" fill="#4772b3" opacity=".6"/></svg>
+    </div>
+    <div style="display:flex;align-items:center;height:100%">
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">File</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">Edit</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">View</span>
+    </div>
+    <div style="display:flex;align-items:stretch;height:100%;padding:0 2px;gap:2px;margin-left:8px">
+      <div style="padding:0 14px;display:flex;align-items:center;background:#3e7bbf;color:#fff;font-size:12px;font-weight:600;border-radius:3px 3px 0 0">Build</div>
+      <div style="padding:0 14px;display:flex;align-items:center;background:#2a2a2a;color:#888;font-size:12px;border-radius:3px 3px 0 0;cursor:pointer">Client View</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:6px;padding:0 10px">
+      <div style="display:flex;align-items:center;gap:5px;padding:2px 10px;background:#252525;border:1px solid #0a0a0a;border-radius:3px">
+        <span style="font-size:10px;color:#555">① Inputs</span>
+        <span style="font-size:10px;color:#333">→</span>
+        <span style="font-size:10px;color:#555">② Define</span>
+        <span style="font-size:10px;color:#333">→</span>
+        <span style="font-size:10px;color:#555">③ Map</span>
+        <span style="font-size:10px;color:#333">→</span>
+        <span style="font-size:10px;color:#555">④ Publish</span>
+      </div>
+      <div style="width:22px;height:22px;border-radius:50%;background:#3e7bbf;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">P</div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN ══ -->
+  <div style="flex:1;display:flex;min-height:0;overflow:hidden">
+
+    <!-- ── LEFT: Option Selector ── -->
+    <div style="width:400px;flex-shrink:0;background:#1d1d1d;border-right:1px solid #111;display:flex;flex-direction:column;overflow-y:auto;padding:28px 22px">
+
+      <!-- Header -->
+      <div style="margin-bottom:6px">
+        <div style="font-size:15px;font-weight:600;color:#ddd;margin-bottom:4px">New Plant Package</div>
+        <div style="font-size:10px;color:#444;line-height:1.6">A package is the full definition of your plant — hierarchy, block templates, mappings, alarms — versioned and deployable as a single file.</div>
+      </div>
+
+      <!-- Step hint -->
+      <div style="display:flex;align-items:center;gap:6px;margin:14px 0 18px">
+        <div style="width:18px;height:18px;border-radius:50%;background:#3e7bbf;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0">1</div>
+        <span style="font-size:10px;color:#888;font-weight:500">Choose how to start</span>
+        <div style="flex:1;height:1px;background:#252525"></div>
+        <div style="width:18px;height:18px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:9px;color:#444">2</div>
+        <span style="font-size:10px;color:#444">Package details</span>
+      </div>
+
+      <!-- Option cards -->
+      <div style="display:flex;flex-direction:column;gap:6px">
+
+        <!-- A: Start blank -->
+        <div class="opt-card">
+          <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.08em;font-weight:600;position:absolute;top:8px;right:10px">A</div>
+          <div class="opt-icon" style="background:#1a1a2a;border:1px solid #2a2a4a">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#4772b3" stroke-width="1.4" fill="rgba(71,114,179,0.08)"/><path d="M12 8v8M8 12h8" stroke="#4772b3" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:600;color:#ccc;margin-bottom:2px">Start blank</div>
+            <div style="font-size:10px;color:#555;line-height:1.4">Build the plant hierarchy and blocks from scratch. Best when starting a greenfield project.</div>
+          </div>
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="#333"><path d="M1 1l5 5-5 5"/></svg>
+        </div>
+
+        <!-- B: From template -->
+        <div class="opt-card">
+          <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.08em;font-weight:600;position:absolute;top:8px;right:10px">B</div>
+          <div class="opt-icon" style="background:#1a2a1a;border:1px solid #2a4a2a">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#4ade80" stroke-width="1.4" fill="rgba(74,222,128,0.06)"/><path d="M7 8h10M7 12h6M7 16h4" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round" opacity=".8"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:600;color:#ccc;margin-bottom:2px">From template</div>
+            <div style="font-size:10px;color:#555;line-height:1.4">Start from a pre-built plant type (LPDC, HPDC, Assembly…). Hierarchy and block definitions included.</div>
+          </div>
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="#333"><path d="M1 1l5 5-5 5"/></svg>
+        </div>
+
+        <!-- C: Import package -->
+        <div class="opt-card">
+          <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.08em;font-weight:600;position:absolute;top:8px;right:10px">C</div>
+          <div class="opt-icon" style="background:#20201a;border:1px solid #383420">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="2" width="18" height="20" rx="3" stroke="#facc15" stroke-width="1.4" fill="rgba(250,204,21,0.06)"/><path d="M7 8h10M7 12h10M7 16h6" stroke="#facc15" stroke-width="1.2" stroke-linecap="round" opacity=".8"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:600;color:#ccc;margin-bottom:2px">Import package</div>
+            <div style="font-size:10px;color:#555;line-height:1.4">Load a <span style="color:#facc15">.dt-pkg</span> file from a previous version or another tool. All blocks and mappings come in.</div>
+          </div>
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="#333"><path d="M1 1l5 5-5 5"/></svg>
+        </div>
+
+        <!-- D: Import hierarchy (SELECTED) -->
+        <div class="opt-card selected-purple">
+          <div style="font-size:9px;color:#7a4a78;text-transform:uppercase;letter-spacing:.08em;font-weight:600;position:absolute;top:8px;right:10px">D</div>
+          <div class="opt-icon" style="background:#1e1626;border:1px solid #3d2552">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h3M10 6h11M3 12h7M14 12h7M3 18h5M12 18h9" stroke="#CD6FB8" stroke-width="1.3" stroke-linecap="round" opacity=".7"/><circle cx="7" cy="6" r="2" fill="none" stroke="#CD6FB8" stroke-width="1.3"/><circle cx="12" cy="12" r="2" fill="none" stroke="#CD6FB8" stroke-width="1.3"/><circle cx="9" cy="18" r="2" fill="none" stroke="#CD6FB8" stroke-width="1.3"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:600;color:#ddd;margin-bottom:2px">Import hierarchy only</div>
+            <div style="font-size:10px;color:#666;line-height:1.4">You have a CMMS, SAP or ERP asset register — bring in the plant structure and define block templates in step ②.</div>
+          </div>
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="#CD6FB8"><path d="M1 1l5 5-5 5"/></svg>
+        </div>
+
+      </div>
+
+      <!-- Spacer -->
+      <div style="flex:1"></div>
+
+      <!-- What's in a package note -->
+      <div style="margin-top:20px;padding:10px 12px;background:#161616;border:1px solid #222;border-radius:4px">
+        <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">A package contains</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:6px"><div style="width:4px;height:4px;border-radius:50%;background:#3e7bbf;flex-shrink:0"></div><span style="font-size:10px;color:#555">Plant hierarchy (areas, machines, blocks)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><div style="width:4px;height:4px;border-radius:50%;background:#3e7bbf;flex-shrink:0"></div><span style="font-size:10px;color:#555">Block templates with property definitions</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><div style="width:4px;height:4px;border-radius:50%;background:#3e7bbf;flex-shrink:0"></div><span style="font-size:10px;color:#555">Tag → parameter mappings</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><div style="width:4px;height:4px;border-radius:50%;background:#3e7bbf;flex-shrink:0"></div><span style="font-size:10px;color:#555">Alarm rules and threshold definitions</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><div style="width:4px;height:4px;border-radius:50%;background:#3e7bbf;flex-shrink:0"></div><span style="font-size:10px;color:#555">Variable overrides per machine</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT: Dynamic detail panel (D selected) ── -->
+    <div style="flex:1;background:#181818;display:flex;flex-direction:column;overflow-y:auto">
+
+      <!-- Step 2 header -->
+      <div style="padding:22px 32px 0;display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid #111;padding-bottom:16px">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #CD6FB8;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#CD6FB8">2</div>
+            <span style="font-size:13px;font-weight:600;color:#ddd">Import plant hierarchy</span>
+            <span style="font-size:9px;color:#7a4a78;background:rgba(205,111,184,.1);border:1px solid rgba(205,111,184,.2);padding:1px 7px;border-radius:2px">Option D</span>
+          </div>
+          <div style="font-size:10px;color:#555;line-height:1.6;max-width:580px">
+            Use an existing asset register from your CMMS, ERP, or IoT platform to define the plant structure. The hierarchy (Plant → Area → Machine) is imported now — you'll assign block templates and map properties in steps ② and ③.
+          </div>
+        </div>
+      </div>
+
+      <!-- Content body -->
+      <div style="display:flex;gap:0;flex:1;min-height:0">
+
+        <!-- File import section -->
+        <div style="flex:1;padding:22px 32px;display:flex;flex-direction:column;gap:18px;border-right:1px solid #111">
+
+          <!-- Format selection -->
+          <div>
+            <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Source format</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <div class="fmt-chip active">CSV — CMMS export</div>
+              <div class="fmt-chip">.json</div>
+              <div class="fmt-chip">XML — ISO 14224</div>
+              <div class="fmt-chip">SAP PM export</div>
+            </div>
+            <div style="font-size:9px;color:#3a3a3a;margin-top:5px">CSV with columns: FuncLocation, Description, Level, ParentLocation, EquipType</div>
+          </div>
+
+          <!-- Drop zone -->
+          <div>
+            <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Import file</div>
+            <div class="drop-zone" style="min-height:120px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#383838" stroke-width="1.4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="font-size:11px;color:#444">Drop file here</span>
+              <span style="font-size:10px;color:#333">or</span>
+              <button style="padding:4px 14px;background:transparent;border:1px solid #333;border-radius:3px;color:#666;font-size:10px;cursor:pointer">Browse files</button>
+            </div>
+          </div>
+
+          <!-- Preview / validation (shown after file selected — shown greyed as placeholder) -->
+          <div style="opacity:.45">
+            <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Preview</div>
+            <div style="background:#161616;border:1px solid #222;border-radius:4px;overflow:hidden">
+              <!-- Table header -->
+              <div style="display:flex;align-items:center;background:#1a1a1a;border-bottom:1px solid #222;padding:5px 10px;gap:0">
+                <span style="width:160px;font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.05em">Func. Location</span>
+                <span style="width:160px;font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.05em">Description</span>
+                <span style="width:60px;font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.05em">Level</span>
+                <span style="flex:1;font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.05em">Parent</span>
+              </div>
+              <div style="display:flex;align-items:center;padding:5px 10px;border-bottom:1px solid #1a1a1a"><span style="width:160px;font-size:10px;color:#666">PLANT-01</span><span style="width:160px;font-size:10px;color:#666">Alloy Wheel Mfg</span><span style="width:60px;font-size:10px;color:#444">Plant</span><span style="flex:1;font-size:10px;color:#333">—</span></div>
+              <div style="display:flex;align-items:center;padding:5px 10px 5px 20px;border-bottom:1px solid #1a1a1a"><span style="width:152px;font-size:10px;color:#666">SMELT-01</span><span style="width:160px;font-size:10px;color:#666">Smelting Area</span><span style="width:60px;font-size:10px;color:#444">Area</span><span style="flex:1;font-size:10px;color:#333">PLANT-01</span></div>
+              <div style="display:flex;align-items:center;padding:5px 10px 5px 30px;border-bottom:1px solid #1a1a1a"><span style="width:142px;font-size:10px;color:#666">FURN-01</span><span style="width:160px;font-size:10px;color:#666">FURNACE_01</span><span style="width:60px;font-size:10px;color:#444">Machine</span><span style="flex:1;font-size:10px;color:#333">SMELT-01</span></div>
+              <div style="display:flex;align-items:center;padding:5px 10px 5px 30px"><span style="width:142px;font-size:10px;color:#666">FURN-02</span><span style="width:160px;font-size:10px;color:#666">FURNACE_02</span><span style="width:60px;font-size:10px;color:#444">Machine</span><span style="flex:1;font-size:10px;color:#333">SMELT-01</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+              <span style="font-size:9px;color:#3a4a3a;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.1);padding:1px 7px;border-radius:2px">12 machines detected</span>
+              <span style="font-size:9px;color:#3a4a3a;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.1);padding:1px 7px;border-radius:2px">4 areas</span>
+              <span style="font-size:9px;color:#3a3a3a;background:#1a1a1a;border:1px solid #2a2a2a;padding:1px 7px;border-radius:2px">No block types in file</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Package details form -->
+        <div style="width:310px;flex-shrink:0;padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+
+          <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.06em;padding-bottom:8px;border-bottom:1px solid #222">Package details</div>
+
+          <div class="field-row">
+            <div class="field-label">Package name <span style="color:#c85252">*</span></div>
+            <input type="text" class="field-input" placeholder="e.g. Alloy Wheel Plant — Phase 1">
+            <div style="font-size:9px;color:#3a3a3a">Becomes the output filename: AlloyWheelPlant_Phase1.dt-pkg</div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-label">Client / Owner</div>
+            <input type="text" class="field-input" placeholder="e.g. Apex Wheels Ltd.">
+          </div>
+
+          <div class="field-row">
+            <div class="field-label">Site / Plant location</div>
+            <input type="text" class="field-input" placeholder="e.g. Chennai Plant 2">
+            <div style="font-size:9px;color:#3a3a3a">May be auto-detected from the import file</div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-label">Industry type</div>
+            <div style="position:relative">
+              <select class="field-input" style="width:100%;height:26px;appearance:none;cursor:pointer;padding-right:22px">
+                <option>Automotive — Metal Forming</option>
+                <option>Automotive — Assembly</option>
+                <option>Food &amp; Beverage</option>
+                <option>Pharmaceuticals</option>
+                <option>Electronics Manufacturing</option>
+                <option>General Discrete Manufacturing</option>
+                <option>Process / Chemicals</option>
+                <option>Other</option>
+              </select>
+              <svg width="8" height="8" viewBox="0 0 10 10" fill="#555" style="position:absolute;right:7px;top:50%;transform:translateY(-50%);pointer-events:none"><path d="M2 3l3 4 3-4H2z"/></svg>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-label">Package version</div>
+            <input type="text" class="field-input" value="1.0.0" placeholder="1.0.0">
+            <div style="font-size:9px;color:#3a3a3a">Semver — increment when republishing</div>
+          </div>
+
+          <!-- What happens next note -->
+          <div style="padding:10px 11px;background:#161616;border:1px solid #222;border-radius:4px;margin-top:4px">
+            <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">What's imported now</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;align-items:flex-start;gap:6px">
+                <div style="width:14px;height:14px;border-radius:50%;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+                  <svg width="7" height="7" viewBox="0 0 10 10" fill="#4ade80"><path d="M1 5l3 3 5-5"/></svg>
+                </div>
+                <span style="font-size:9px;color:#555;line-height:1.4">Plant → Area → Machine tree</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:6px">
+                <div style="width:14px;height:14px;border-radius:50%;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+                  <svg width="7" height="7" viewBox="0 0 10 10" fill="#4ade80"><path d="M1 5l3 3 5-5"/></svg>
+                </div>
+                <span style="font-size:9px;color:#555;line-height:1.4">Asset IDs and equipment descriptions</span>
+              </div>
+            </div>
+            <div style="height:1px;background:#222;margin:8px 0"></div>
+            <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Defined in steps ② → ③</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;align-items:flex-start;gap:6px">
+                <div style="width:14px;height:14px;border-radius:50%;background:#1a1a1a;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+                  <span style="font-size:7px;color:#444;font-weight:600">2</span>
+                </div>
+                <span style="font-size:9px;color:#444;line-height:1.4">Block templates per machine type</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:6px">
+                <div style="width:14px;height:14px;border-radius:50%;background:#1a1a1a;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+                  <span style="font-size:7px;color:#444;font-weight:600">3</span>
+                </div>
+                <span style="font-size:9px;color:#444;line-height:1.4">Tag → parameter mappings</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <button class="cta-btn" style="background:rgba(205,111,184,.15);border:1px solid rgba(205,111,184,.35);color:#CD6FB8;margin-top:auto">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Import Hierarchy &amp; Continue
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Define › Machine Block</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+:root{
+  /* Brand */
+  --color-blue: #3e7bbf;
+  --color-blue-light: #60a5fa;
+  /* Status */
+  --color-green: #4ade80;
+  --color-green-muted: #70b170;
+  --color-yellow: #facc15;
+  --color-orange: #fb923c;
+  --color-red: #f87171;
+  /* Alarm */
+  --color-alarm-warning: #e07b39;
+  --color-alarm-critical: #c85252;
+  /* Variable */
+  --color-var: #CD6FB8;
+  --color-var-bg: rgba(205,111,184,0.08);
+  --color-var-border: rgba(205,111,184,0.25);
+  /* Surface */
+  --bg-topbar: #1a1a1a;
+  --bg-panel: #1d1d1d;
+  --bg-section: #252525;
+  --bg-canvas: #181818;
+}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;background:#1d1d1d;color:#cccccc}
+*{box-sizing:border-box}
+button{cursor:pointer;font-family:inherit}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#1d1d1d}
+::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:2px}
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;background:#1d1d1d;overflow:hidden;font-size:12px;height:100%;width:100%">
+
+  <!-- ══ TOPBAR ══ -->
+  <div style="height:28px;background:#1a1a1a;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;flex-shrink:0;width:100%">
+    <div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-right:1px solid #0a0a0a;flex-shrink:0">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#4772b3" stroke-width="1.4" fill="rgba(71,114,179,0.15)"></path><path d="M8 5l4 2.5v2.5L8 12.5 4 10V7.5L8 5z" fill="#4772b3" opacity="0.6"></path></svg>
+    </div>
+    <div style="display:flex;align-items:center;height:100%">
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">File</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">Edit</span>
+      <span style="padding:0 8px;height:100%;display:flex;align-items:center;color:#ccc;font-size:12px;border-right:1px solid #0a0a0a">View</span>
+    </div>
+    <!-- Breadcrumb -->
+    <div style="display:flex;align-items:center;height:100%;padding:0 10px;gap:5px;border-right:1px solid #0a0a0a">
+      <span style="font-size:11px;color:#888">Alloy Wheel</span>
+      <span style="font-size:10px;color:#444">›</span>
+      <span style="font-size:11px;color:#bbb;font-weight:500">New Project</span>
+    </div>
+    <div style="display:flex;align-items:stretch;height:100%;padding:0 2px;gap:2px;margin-left:8px">
+      <div style="padding:0 14px;display:flex;align-items:center;background:#3e7bbf;color:#fff;font-size:12px;font-weight:600;border-radius:3px 3px 0 0">Build</div>
+      <div style="padding:0 14px;display:flex;align-items:center;background:#2a2a2a;color:#888;font-size:12px;border-radius:3px 3px 0 0;cursor:pointer">Client View</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:6px;padding:0 10px">
+      <!-- Step indicator — ② active -->
+      <div style="display:flex;align-items:center;gap:5px;padding:2px 10px;background:#252525;border:1px solid #0a0a0a;border-radius:3px">
+        <span style="font-size:10px;color:#555;text-decoration:line-through">① Inputs</span>
+        <span style="font-size:10px;color:#444">→</span>
+        <span style="font-size:10px;color:#3e7bbf;font-weight:600">② Define</span>
+        <span style="font-size:10px;color:#444">→</span>
+        <span style="font-size:10px;color:#555">③ Map</span>
+        <span style="font-size:10px;color:#444">→</span>
+        <span style="font-size:10px;color:#555">④ Publish</span>
+      </div>
+      <div style="width:1px;height:16px;background:#3a3a3a"></div>
+      <!-- Unsaved badge -->
+      <div style="display:flex;align-items:center;gap:4px;padding:1px 7px;background:#252525;border:1px solid #333;border-radius:3px">
+        <span style="width:5px;height:5px;border-radius:50%;background:#facc15;display:inline-block"></span>
+        <span style="font-size:10px;color:#888">Unsaved</span>
+      </div>
+      <button style="padding:3px 12px;background:#3e7bbf;border:1px solid #0a0a0a;border-radius:3px;color:#fff;font-size:12px;font-weight:600">Save</button>
+      <div style="width:22px;height:22px;border-radius:50%;background:#3e7bbf;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;cursor:pointer">P</div>
+    </div>
+  </div>
+
+  <!-- ══ CONTEXT BANNER — updates per selected hierarchy node ══ -->
+  <div style="height:32px;background:#141e2e;border-bottom:2px solid #1e3050;display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0">
+    <!-- Level breadcrumb -->
+    <div style="display:flex;align-items:center;gap:5px">
+      <span style="font-size:9px;color:#3a5a7a;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:2px;padding:1px 6px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em">Machine</span>
+      <svg width="10" height="10" viewBox="0 0 16 16" fill="#555"><rect x="3" y="3" width="10" height="10" rx="2"></rect></svg>
+      <span style="font-size:11px;font-weight:700;color:#60a5fa;letter-spacing:0.01em">FURNACE_01</span>
+      <span style="font-size:10px;color:#3a4a6a">·</span>
+      <span style="font-size:10px;color:#555">Smelting</span>
+    </div>
+    <div style="width:1px;height:16px;background:#1e3050"></div>
+    <!-- Block type -->
+    <div style="display:flex;align-items:center;gap:5px">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 5v6L8 15 1 11V5L8 1z" stroke="#3e7bbf" stroke-width="1.3" fill="rgba(62,123,191,0.15)"></path></svg>
+      <span style="font-size:10px;color:#7a9abf">Block:</span>
+      <span style="font-size:10px;color:#bbb;font-weight:500">LPDC_Furnace</span>
+      <span style="font-size:9px;color:#3a4a5a;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:2px;padding:0 5px">v1</span>
+    </div>
+    <div style="width:1px;height:16px;background:#1e3050"></div>
+    <div style="display:flex;align-items:center;gap:5px">
+      <svg width="9" height="9" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3e7bbf" stroke-width="1.3"></circle><path d="M8 5v4M8 11v.5" stroke="#3e7bbf" stroke-width="1.5" stroke-linecap="round"></path></svg>
+      <span style="font-size:10px;color:#5a7a9a">Editing <span style="color:#60a5fa;font-weight:600">instance properties</span> — block template changes affect all machines of this type</span>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:4px">
+      <span style="font-size:10px;color:#555">Same block on:</span>
+      <span style="font-size:10px;color:#bbb;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:2px;padding:0 6px">FURNACE_02</span>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden;min-height:0">
+
+    <!-- ══ LEFT PANEL — Plant Hierarchy ══ -->
+    <div style="width:260px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #0a0a0a;background:#1d1d1d;overflow:hidden">
+
+      <!-- Panel header -->
+      <div style="height:26px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.4"><rect x="2" y="3" width="12" height="2" rx="1"></rect><rect x="2" y="7" width="9" height="2" rx="1"></rect><rect x="2" y="11" width="6" height="2" rx="1"></rect></svg>
+        <span style="font-size:11px;font-weight:600;color:#ccc;flex:1">Plant Hierarchy</span>
+        <button style="padding:0 7px;height:16px;background:transparent;border:1px solid #333;border-radius:2px;color:#555;font-size:9px;cursor:pointer">+ Add level</button>
+      </div>
+
+      <!-- Search -->
+      <div style="padding:5px 8px;background:#1a1a1a;border-bottom:1px solid #111;flex-shrink:0">
+        <div style="background:#141414;border:1px solid #2a2a2a;border-radius:3px;padding:3px 7px;display:flex;align-items:center;gap:5px">
+          <svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#444" stroke-width="2"><circle cx="7" cy="7" r="5"></circle><path d="M12 12l2 2"></path></svg>
+          <span style="font-size:10px;color:#444">Find level or asset…</span>
+        </div>
+      </div>
+
+      <div style="flex:1;overflow-y:auto;min-height:0;padding:4px 0">
+
+        <!-- ── Plant: Alloy Wheel Mfg ── -->
+        <div style="display:flex;align-items:center;padding:0 8px;height:24px;cursor:pointer;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <!-- Plant icon -->
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#777" stroke-width="1.3" style="flex-shrink:0"><rect x="2" y="5" width="12" height="9" rx="2"></rect><path d="M5 5V3a3 3 0 0 1 6 0v2" stroke-linecap="round"></path></svg>
+          <span style="font-size:11px;color:#999;flex:1">Alloy Wheel Mfg</span>
+          <span style="font-size:9px;color:#444;background:#252525;border:1px solid #333;border-radius:2px;padding:0 4px">Plant</span>
+        </div>
+
+        <!-- ── Area: Smelting (expanded) ── -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 20px;height:24px;cursor:pointer;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <!-- Area icon -->
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#777" stroke-width="1.3" style="flex-shrink:0"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+          <span style="font-size:11px;color:#bbb;flex:1">Smelting</span>
+          <span style="font-size:9px;color:#444;background:#252525;border:1px solid #333;border-radius:2px;padding:0 4px">Area</span>
+        </div>
+
+        <!-- ── Machine: FURNACE_01 (SELECTED) ── -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 34px;height:26px;background:#243040;border-left:2px solid #3e7bbf;cursor:pointer;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#888" style="flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <!-- Machine icon -->
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="#3e7bbf" style="flex-shrink:0"><rect x="3" y="3" width="10" height="10" rx="2"></rect></svg>
+          <span style="font-size:11px;color:#ddd;font-weight:600;flex:1">FURNACE_01</span>
+          <span style="font-size:9px;color:#3a5a7a;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:2px;padding:0 4px">Machine</span>
+        </div>
+
+        <!-- ── Block: LPDC_Furnace (child of FURNACE_01) ── -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 50px;height:22px;border-bottom:1px solid #0f0f0f;cursor:pointer;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="none" style="flex-shrink:0"><rect x="1" y="1" width="8" height="8" rx="1" stroke="#555" stroke-width="1"></rect></svg>
+          <!-- Block icon -->
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 2L14 5.5v5L8 14 2 10.5v-5L8 2z" stroke="#555" stroke-width="1.3"></path></svg>
+          <span style="font-size:10px;color:#888;flex:1">LPDC_Furnace</span>
+          <span style="font-size:9px;color:#3a4a3a;background:#1a2a1a;border:1px solid #2a3a2a;border-radius:2px;padding:0 4px">Block</span>
+        </div>
+
+        <!-- ── Machine: FURNACE_02 ── -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 34px;height:24px;border-bottom:1px solid #0f0f0f;cursor:pointer;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#666" style="flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="#555" style="flex-shrink:0"><rect x="3" y="3" width="10" height="10" rx="2"></rect></svg>
+          <span style="font-size:11px;color:#777;flex:1">FURNACE_02</span>
+          <span style="font-size:9px;color:#3a3a3a;background:#222;border:1px solid #2a2a2a;border-radius:2px;padding:0 4px">Machine</span>
+        </div>
+
+        <!-- separator -->
+        <div style="height:2px;background:#0a0a0a;margin:4px 0"></div>
+
+        <!-- ── Area: Casting LPDC (collapsed) ── -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 20px;height:24px;border-bottom:1px solid #0f0f0f;cursor:pointer;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#555" style="flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.3" style="flex-shrink:0"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+          <span style="font-size:11px;color:#666;flex:1">Casting (LPDC)</span>
+          <span style="font-size:9px;color:#555;margin-right:4px">3</span>
+          <span style="font-size:9px;color:#3a3a3a;background:#222;border:1px solid #2a2a2a;border-radius:2px;padding:0 4px">Area</span>
+        </div>
+
+        <!-- ── Area: Machining (collapsed) ── -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 20px;height:24px;border-bottom:1px solid #0f0f0f;cursor:pointer;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#555" style="flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.3" style="flex-shrink:0"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+          <span style="font-size:11px;color:#666;flex:1">Machining</span>
+          <span style="font-size:9px;color:#555;margin-right:4px">5</span>
+          <span style="font-size:9px;color:#3a3a3a;background:#222;border:1px solid #2a2a2a;border-radius:2px;padding:0 4px">Area</span>
+        </div>
+
+        <!-- ── Area: Heat Treatment (collapsed) ── -->
+        <div style="display:flex;align-items:center;padding:0 8px 0 20px;height:24px;border-bottom:1px solid #0f0f0f;cursor:pointer;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 10 10" fill="#555" style="flex-shrink:0"><path d="M3 2l4 4-4 4V2z"></path></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.3" style="flex-shrink:0"><path d="M2 5l6-3 6 3v6l-6 3-6-3V5z"></path></svg>
+          <span style="font-size:11px;color:#666;flex:1">Heat Treatment</span>
+          <span style="font-size:9px;color:#555;margin-right:4px">2</span>
+          <span style="font-size:9px;color:#3a3a3a;background:#222;border:1px solid #2a2a2a;border-radius:2px;padding:0 4px">Area</span>
+        </div>
+
+        <!-- Definition status summary for selected -->
+        <div style="margin:8px 8px 4px;padding:6px 8px;background:#1a1a1a;border:1px solid #252525;border-radius:3px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:9px;color:#555">FURNACE_01 — properties</span>
+            <span style="font-size:9px;color:#4ade80;font-weight:600">23 / 34</span>
+          </div>
+          <div style="height:3px;background:#2a2a2a;border-radius:2px;overflow:hidden">
+            <div style="width:68%;height:100%;background:#4ade80;border-radius:2px"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ CENTER — Property Definition Table ══ -->
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;background:#181818">
+
+      <!-- Center toolbar -->
+      <div style="height:30px;background:#222;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0">
+        <span style="font-size:11px;color:#888">FURNACE_01</span>
+        <span style="font-size:10px;color:#444">·</span>
+        <span style="font-size:10px;color:#555">Smelting</span>
+        <span style="font-size:10px;color:#333;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:2px;padding:0 5px;font-size:9px;color:#4a7aaf">Block: LPDC_Furnace v1</span>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:9px;color:#555">Source:</span>
+          <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:#7aaa7a"><span style="width:6px;height:6px;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:1px;display:inline-block"></span>Tag</span>
+          <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:#aa8a5a"><span style="width:6px;height:6px;background:#2a1a0a;border:1px solid #4a3a1a;border-radius:1px;display:inline-block"></span>Param</span>
+          <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:#666"><span style="width:6px;height:6px;background:#252525;border:1px solid #333;border-radius:1px;display:inline-block"></span>Manual</span>
+        </div>
+        <div style="width:1px;height:16px;background:#333"></div>
+        <button style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:transparent;border:1px solid #3e7bbf;border-radius:3px;color:#60a5fa;font-size:10px;cursor:pointer">
+          <svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 2v8M5 7l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 12h10" stroke-linecap="round"></path></svg>
+          Import more
+        </button>
+        <button style="display:flex;align-items:center;gap:4px;padding:2px 8px;background:transparent;border:1px solid #333;border-radius:3px;color:#888;font-size:10px;cursor:pointer">+ Add property</button>
+      </div>
+
+      <!-- Column headers -->
+      <div style="height:22px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 12px;flex-shrink:0;font-size:9px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.06em">
+        <span style="flex:1">Property</span>
+        <span style="width:72px;text-align:center">Source</span>
+        <span style="width:56px;text-align:right">Type</span>
+        <span style="width:50px;text-align:right">Unit</span>
+        <span style="width:86px;text-align:center">Mapped In</span>
+        <span style="width:34px"></span>
+        <span style="width:11px"></span>
+      </div>
+
+      <!-- Scrollable property rows -->
+      <div style="flex:1;overflow-y:auto;min-height:0">
+
+        <!-- ── Section: Machine Metrics ── -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1">Machine Metrics</span>
+          <span style="font-size:9px;color:#555;margin-right:8px">6 defined · 2 pending</span>
+          <button style="width:15px;height:15px;background:transparent;border:none;color:#555;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+        </div>
+
+        <!-- Melt Bath Temp — selected, expanded -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#243040;border-bottom:1px solid #1e3050;cursor:pointer">
+          <div style="width:2px;height:14px;background:#3e7bbf;border-radius:1px;margin-right:7px;flex-shrink:0"></div>
+          <span style="flex:1;font-size:11px;color:#ddd;font-weight:500">Melt Bath Temp</span>
+          <div style="width:72px;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:9px;color:#7aaa7a;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;padding:0 5px">Tag import</span>
+          </div>
+          <span style="font-size:10px;color:#6688aa;width:56px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#7a5e38;width:50px;text-align:right">°C</span>
+          <!-- Mapped In: Ready -->
+          <div style="width:86px;display:flex;align-items:center;justify-content:center;gap:4px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span>
+            <span style="font-size:9px;color:#70b170">Ready</span>
+          </div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:var(--color-var);margin-right:2px"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button>
+          <button style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#555"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Expanded edit panel — single column, no alarm thresholds -->
+        <div style="background:#1a2333;border-bottom:2px solid #0a0a0a;padding:10px 16px">
+          <div style="display:flex;flex-direction:column;gap:6px;max-width:600px">
+            <div>
+              <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Display Name</div>
+              <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 8px;font-size:10px;color:#ddd;display:flex;align-items:center">Melt Bath Temperature</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <div style="flex:1">
+                <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Value Type</div>
+                <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#bbb;display:flex;align-items:center;justify-content:space-between;cursor:pointer"><span>Float</span><svg width="7" height="7" viewBox="0 0 10 10" fill="#555"><path d="M2 3l3 4 3-4H2z"></path></svg></div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Unit</div>
+                <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:10px;color:#c87a3a;display:flex;align-items:center;justify-content:space-between;cursor:pointer"><span>°C</span><svg width="7" height="7" viewBox="0 0 10 10" fill="#555"><path d="M2 3l3 4 3-4H2z"></path></svg></div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Description</div>
+                <div style="height:22px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 8px;font-size:10px;color:#666;display:flex;align-items:center;font-style:italic">Add description…</div>
+              </div>
+            </div>
+            <!-- Variable row -->
+            <div style="background:var(--color-var-bg);border:1px solid var(--color-var-border);border-radius:3px;padding:6px 8px;display:flex;align-items:center;gap:8px">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 5L5 9L1 5Z" stroke="var(--color-var)" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="var(--color-var)"></circle></svg>
+              <span style="font-size:9px;color:var(--color-var);font-weight:600">Variable</span>
+              <span style="font-size:9px;color:#7a5a74">· can be overridden per instance</span>
+              <div style="flex:1"></div>
+              <span style="font-size:9px;color:#555">Range:</span>
+              <div style="height:18px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:9px;color:#aaa;display:flex;align-items:center;width:44px">600</div>
+              <span style="font-size:9px;color:#444">—</span>
+              <div style="height:18px;background:#161c24;border:1px solid #2a3444;border-radius:2px;padding:0 6px;font-size:9px;color:#aaa;display:flex;align-items:center;width:44px">900</div>
+              <span style="font-size:9px;color:#555">°C</span>
+            </div>
+            <!-- Source trace -->
+            <div style="display:flex;align-items:center;gap:4px;padding:4px 7px;background:#0e1a0e;border:1px solid #1e3a1e;border-radius:3px">
+              <svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#3a5a3a" stroke-width="1.4"><rect x="3" y="2" width="10" height="7" rx="1"></rect><rect x="5" y="12" width="6" height="2" rx="1" fill="#3a5a3a" stroke="none"></rect><path d="M6 9v3M10 9v3" stroke-linecap="round"></path></svg>
+              <span style="font-size:9px;color:#4a7a4a">Imported from SCADA_tags_Oct.csv</span>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:6px;padding-top:8px;margin-top:6px;border-top:1px solid #1e2e40">
+            <button style="padding:3px 10px;background:transparent;border:1px solid #2a3a4a;border-radius:3px;color:#666;font-size:10px;cursor:pointer">Discard</button>
+            <button style="padding:3px 12px;background:#3e7bbf;border:1px solid #0a0a0a;border-radius:3px;color:#fff;font-size:10px;font-weight:600;cursor:pointer">Save Changes</button>
+          </div>
+        </div>
+
+        <!-- Zone Temperature -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;border-bottom:1px solid #111;cursor:pointer">
+          <span style="flex:1;font-size:11px;color:#888">Zone Temperature</span>
+          <div style="width:72px;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;color:#7aaa7a;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;padding:0 5px">Tag import</span></div>
+          <span style="font-size:10px;color:#555;width:56px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">°C</span>
+          <div style="width:86px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Ready</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button>
+          <button style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#555"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Oil Level — param, type conflict -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;border-bottom:1px solid #111;cursor:pointer;background:rgba(200,82,82,0.05)">
+          <svg width="9" height="9" viewBox="0 0 16 16" fill="#e07b39" style="flex-shrink:0;margin-right:6px"><path d="M8 1l7 13H1L8 1z M8 6v4 M8 11.5v.5"></path></svg>
+          <span style="flex:1;font-size:11px;color:#c88">Oil Level</span>
+          <div style="width:72px;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;color:#aa8a5a;background:#2a1a0a;border:1px solid #4a3a1a;border-radius:2px;padding:0 5px">Param</span></div>
+          <span style="font-size:10px;color:#c85252;width:56px;text-align:right">Int ⚠</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">%</span>
+          <!-- Mapped In: Conflict (type mismatch from param) -->
+          <div style="width:86px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#c85252;display:inline-block"></span><span style="font-size:9px;color:#c85252">Conflict</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button>
+          <button style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#555"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Furnace Pressure -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;border-bottom:1px solid #111;cursor:pointer">
+          <span style="flex:1;font-size:11px;color:#888">Furnace Pressure</span>
+          <div style="width:72px;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;color:#7aaa7a;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;padding:0 5px">Tag import</span></div>
+          <span style="font-size:10px;color:#555;width:56px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">bar</span>
+          <!-- Mapped In: No Source -->
+          <div style="width:86px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#555;display:inline-block"></span><span style="font-size:9px;color:#555">No Source</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button>
+          <button style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#555"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- Vibration -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;border-bottom:1px solid #111;cursor:pointer">
+          <span style="flex:1;font-size:11px;color:#888">Vibration</span>
+          <div style="width:72px;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;color:#7aaa7a;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;padding:0 5px">Tag import</span></div>
+          <span style="font-size:10px;color:#555;width:56px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">mm/s</span>
+          <div style="width:86px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Ready</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button>
+          <button style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#555"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+        <!-- ── Section: Energy Consumption ── -->
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;background:#252525;border-bottom:1px solid #111;border-top:2px solid #0a0a0a;position:sticky;top:0;z-index:1;cursor:pointer">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="#888" style="margin-right:5px;flex-shrink:0"><path d="M2 3l4 4 4-4H2z"></path></svg>
+          <span style="font-size:11px;font-weight:600;color:#ccc;flex:1">Energy Consumption</span>
+          <span style="font-size:9px;color:#555;margin-right:8px">4 defined</span>
+          <button style="width:15px;height:15px;background:transparent;border:none;color:#555;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">+</button>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;border-bottom:1px solid #111;cursor:pointer">
+          <span style="flex:1;font-size:11px;color:#888">Instant Power</span>
+          <div style="width:72px;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;color:#7aaa7a;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;padding:0 5px">Tag import</span></div>
+          <span style="font-size:10px;color:#555;width:56px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">kW</span>
+          <div style="width:86px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Ready</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button>
+          <button style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#555"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 12px;height:24px;border-bottom:1px solid #111;cursor:pointer">
+          <span style="flex:1;font-size:11px;color:#888">Total Energy</span>
+          <div style="width:72px;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;color:#7aaa7a;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;padding:0 5px">Tag import</span></div>
+          <span style="font-size:10px;color:#555;width:56px;text-align:right">Float</span>
+          <span style="font-size:10px;color:#6a4e28;width:50px;text-align:right">kWh</span>
+          <div style="width:86px;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#70b170;display:inline-block"></span><span style="font-size:9px;color:#70b170">Ready</span></div>
+          <button title="Add as variable" style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#484848;margin-right:2px"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 5L5 9L1 5Z" stroke="currentColor" stroke-width="1.3" fill="none"></path><circle cx="5" cy="5" r="1.3" fill="currentColor"></circle></svg></button>
+          <button style="width:16px;height:16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;color:#555"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="#555" stroke-width="1.5"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"></path></svg></button>
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="#444" style="flex-shrink:0;margin-left:5px"><circle cx="2" cy="2" r="1"></circle><circle cx="4" cy="2" r="1"></circle><circle cx="2" cy="5" r="1"></circle><circle cx="4" cy="5" r="1"></circle><circle cx="2" cy="8" r="1"></circle><circle cx="4" cy="8" r="1"></circle></svg>
+        </div>
+
+      </div>
+
+      <!-- Bottom nav -->
+      <div style="height:40px;background:#1d1d1d;border-top:1px solid #0a0a0a;display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0">
+        <button style="padding:4px 12px;background:transparent;border:1px solid #2a2a2a;border-radius:3px;color:#666;font-size:11px;cursor:pointer">← Back to Inputs</button>
+        <div style="flex:1"></div>
+        <span style="font-size:10px;color:#555">23 / 34 required params defined</span>
+        <div style="width:120px;height:3px;background:#2a2a2a;border-radius:2px;overflow:hidden"><div style="width:68%;height:100%;background:#3e7bbf;border-radius:2px"></div></div>
+        <button style="padding:4px 16px;background:#3e7bbf;border:1px solid #0a0a0a;border-radius:3px;color:#fff;font-size:11px;font-weight:600;cursor:pointer">Next: Map →</button>
+      </div>
+
+    </div>
+
+    <!-- ══ RIGHT PANEL — Import Suggestions ══ -->
+    <div style="width:240px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid #0a0a0a;background:#1d1d1d;overflow:hidden">
+
+      <div style="height:26px;background:#252525;border-bottom:1px solid #0a0a0a;display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-width="1.4"><path d="M8 2v8M5 7l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 12h10" stroke-linecap="round"></path></svg>
+        <span style="font-size:11px;font-weight:600;color:#ccc;flex:1">Suggestions</span>
+        <span style="font-size:10px;color:#facc15;background:rgba(250,204,21,0.1);padding:0 5px;border-radius:2px;font-weight:600">11</span>
+      </div>
+
+      <div style="flex:1;overflow-y:auto;min-height:0;padding:4px 0">
+
+        <!-- Group: Unassigned tags -->
+        <div style="padding:5px 10px 2px;font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;display:flex;align-items:center;gap:4px">
+          <span style="width:5px;height:5px;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:1px;display:inline-block"></span>
+          Unassigned tags (8)
+        </div>
+
+        <div style="padding:5px 10px;border-bottom:1px solid #111;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <div style="flex:1">
+            <div style="font-size:10px;color:#bbb">FNS_01.BATH_HI</div>
+            <div style="font-size:9px;color:#555;margin-top:1px">Float · no unit</div>
+          </div>
+          <button style="padding:1px 8px;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;color:#7aaa7a;font-size:9px;cursor:pointer;flex-shrink:0">+ Add</button>
+        </div>
+
+        <div style="padding:5px 10px;border-bottom:1px solid #111;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <div style="flex:1">
+            <div style="font-size:10px;color:#bbb">FNS_01.ZONE_2</div>
+            <div style="font-size:9px;color:#555;margin-top:1px">Float · °C</div>
+          </div>
+          <button style="padding:1px 8px;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;color:#7aaa7a;font-size:9px;cursor:pointer;flex-shrink:0">+ Add</button>
+        </div>
+
+        <div style="padding:5px 10px;border-bottom:1px solid #111;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <div style="flex:1">
+            <div style="font-size:10px;color:#bbb">FNS_01.TILT_ANG</div>
+            <div style="font-size:9px;color:#555;margin-top:1px">Float · degrees</div>
+          </div>
+          <button style="padding:1px 8px;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:2px;color:#7aaa7a;font-size:9px;cursor:pointer;flex-shrink:0">+ Add</button>
+        </div>
+
+        <div style="padding:5px 10px;border-bottom:1px solid #111;display:flex;align-items:center;gap:6px;cursor:pointer;opacity:0.7">
+          <div style="flex:1">
+            <div style="font-size:10px;color:#888">+ 5 more tags</div>
+          </div>
+          <button style="padding:1px 8px;background:transparent;border:1px solid #333;border-radius:2px;color:#666;font-size:9px;cursor:pointer;flex-shrink:0">Show</button>
+        </div>
+
+        <!-- Group: Missing required params -->
+        <div style="padding:8px 10px 2px;font-size:9px;color:#555;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;display:flex;align-items:center;gap:4px;border-top:2px solid #111;margin-top:2px">
+          <span style="width:5px;height:5px;background:#2a1a0a;border:1px solid #4a3a1a;border-radius:1px;display:inline-block"></span>
+          Required params (3 missing)
+        </div>
+
+        <div style="padding:5px 10px;border-bottom:1px solid #111;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <div style="flex:1">
+            <div style="font-size:10px;color:#c88">Cycle Time</div>
+            <div style="font-size:9px;color:#555;margin-top:1px">Int · seconds · required</div>
+          </div>
+          <button style="padding:1px 8px;background:#2a1a0a;border:1px solid #4a3a1a;border-radius:2px;color:#aa8a5a;font-size:9px;cursor:pointer;flex-shrink:0">+ Add</button>
+        </div>
+
+        <div style="padding:5px 10px;border-bottom:1px solid #111;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <div style="flex:1">
+            <div style="font-size:10px;color:#c88">Die Temp</div>
+            <div style="font-size:9px;color:#555;margin-top:1px">Float · °C · required</div>
+          </div>
+          <button style="padding:1px 8px;background:#2a1a0a;border:1px solid #4a3a1a;border-radius:2px;color:#aa8a5a;font-size:9px;cursor:pointer;flex-shrink:0">+ Add</button>
+        </div>
+
+        <div style="padding:5px 10px;border-bottom:1px solid #111;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <div style="flex:1">
+            <div style="font-size:10px;color:#c88">Holding Time</div>
+            <div style="font-size:9px;color:#555;margin-top:1px">Int · seconds · required</div>
+          </div>
+          <button style="padding:1px 8px;background:#2a1a0a;border:1px solid #4a3a1a;border-radius:2px;color:#aa8a5a;font-size:9px;cursor:pointer;flex-shrink:0">+ Add</button>
+        </div>
+
+        <!-- Add all -->
+        <div style="padding:8px;border-top:2px solid #0a0a0a;margin-top:2px">
+          <button style="width:100%;padding:5px;background:transparent;border:1px solid #2a2a2a;border-radius:3px;color:#666;font-size:10px;cursor:pointer">Add all missing params</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

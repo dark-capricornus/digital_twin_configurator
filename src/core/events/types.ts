@@ -13,6 +13,12 @@ export type EventPayloads = {
     rotation?: [number, number, number];
     scale?: [number, number, number];
   };
+  NODE_TRANSFORM_PREVIEW: {
+    nodeId: string;
+    position?: [number, number, number];
+    rotation?: [number, number, number];
+    scale?: [number, number, number];
+  };
   NODE_REPARENTED: { nodeId: string; oldParentId: string; newParentId: string };
   
   // Asset Events
@@ -27,6 +33,9 @@ export type EventPayloads = {
   COMMAND_EXECUTED: { commandName: string; timestamp: number };
   COMMAND_UNDONE: { commandName: string; timestamp: number };
   COMMAND_REDONE: { commandName: string; timestamp: number };
+
+  // Foundation Events
+  FOUNDATION_UPDATED: { cellCount: number; snapshot: any };
 };
 
 export type EventType = keyof EventPayloads;

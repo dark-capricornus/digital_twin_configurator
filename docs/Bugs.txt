@@ -1,0 +1,15 @@
+Even if the zone is not added or unassigned, machines should be given a floor and zone/department must be an overlay above the floors
+remove the plus button from the hierarchy machines zone
+move the options from the hierarchy to plant name remove the plant code from there
+add to department must be happening from an interactive popup asking which department it should added either to existing department or create a new department if not present 
+fix the list of bugs
+fix the orthographic view screen
+zones must be like overlay not like 3d plane
+machines animation tracker to be setup and movement machines feature setup - like setting up their movement map (Playblast)
+X/Y axis are far from the center of canvas, if machines move far them the 3d models are quite mal functioning
+planes not generated properly while in movement
+tooltips are to be moved to to question mark and tutorial setup
+Autosave feature has to be implemented
+data files upload and checkup has to be done
+when the machine is clicked the camera must be moved like how it happens while clicking a machine details in tag registry
+simulate and live mode must be merged to show preview

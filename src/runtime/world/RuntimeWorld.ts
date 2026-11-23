@@ -3,11 +3,17 @@ import type { Component } from '../ecs/Component';
 import type { System } from '../ecs/System';
 import { EntityManager } from './EntityManager';
 import { ComponentStore } from './ComponentStore';
+import { FoundationSystem } from '../systems/FoundationSystem';
+import type { IRuntimeEngine } from '../ecs/IRuntimeEngine';
 
-export class RuntimeWorld {
+export class RuntimeWorld implements IRuntimeEngine {
   private entityManager = new EntityManager();
   private stores = new Map<string, ComponentStore<any>>();
   private systems: System[] = [];
+
+  constructor() {
+    this.addSystem(new FoundationSystem(this));
+  }
 
   public getEntityManager(): EntityManager {
     return this.entityManager;

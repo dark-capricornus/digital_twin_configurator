@@ -1,6 +1,7 @@
 import type { Command } from './CommandManager';
 import { useSceneStore, type SceneNode } from '../../store/scene';
 import { RuntimeContext } from '../../runtime/world/RuntimeContext';
+import { EventBus } from '../events';
 
 export class AddNodeCommand implements Command {
   public name = 'Add Node';
@@ -69,6 +70,8 @@ export class RemoveNodeCommand implements Command {
       RuntimeContext.runInWorldContext((world) => {
         world.removeEntity(this.nodeId);
       });
+
+      EventBus.emit('NODE_REMOVED', { nodeId: this.nodeId, parentId: this.parentIdBackup });
     }
   }
 
@@ -152,6 +155,13 @@ export class UpdateTransformCommand implements Command {
       if (this.newTransform.position) transformComp.position = [...this.newTransform.position];
       if (this.newTransform.rotation) transformComp.rotation = [...this.newTransform.rotation];
       if (this.newTransform.scale) transformComp.scale = [...this.newTransform.scale];
+    });
+
+    EventBus.emit('NODE_TRANSFORM_UPDATED', {
+      nodeId: this.nodeId,
+      position: this.newTransform.position ? [...this.newTransform.position] as [number, number, number] : undefined,
+      rotation: this.newTransform.rotation ? [...this.newTransform.rotation] as [number, number, number] : undefined,
+      scale: this.newTransform.scale ? [...this.newTransform.scale] as [number, number, number] : undefined,
     });
   }
 

@@ -97,6 +97,15 @@ export class PlaceModelCommand implements Command {
           footprint: [...this.boundingInfo.footprint],
           pivotMode: 'auto',
         } as any);
+
+        // Footprint component — drives the FoundationSystem cache
+        world.addComponent({
+          type: 'Footprint',
+          entityId: this.node.id,
+          mode: 'aabb',
+          localHalfExtentsXZ: [this.boundingInfo.footprint[0] / 2, this.boundingInfo.footprint[1] / 2],
+          paddingOverride: null,
+        } as any);
       }
     });
 

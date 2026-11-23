@@ -48,6 +48,15 @@ export class RuntimeRegistry {
         loop: true,
       },
     });
+
+    this.registerSchema({
+      type: 'Footprint',
+      defaults: {
+        mode: 'aabb',
+        localHalfExtentsXZ: [0.5, 0.5],
+        paddingOverride: null,
+      },
+    });
   }
 
   public static registerSchema(schema: ComponentSchema): void {

@@ -66,3 +66,17 @@ export interface PlacementComponent extends Component {
   /** How the pivot was determined */
   pivotMode: 'center' | 'bottom' | 'auto' | 'custom';
 }
+
+export interface FootprintComponent extends Component {
+  type: 'Footprint';
+  mode: 'aabb' | 'custom';
+  
+  /** For 'aabb' mode: half-extents in local space (pre-rotation) */
+  localHalfExtentsXZ: [number, number];
+  
+  /** For 'custom' mode: array of [gx, gz] offsets from origin cell */
+  customCells?: [number, number][];
+  
+  /** Optional padding override in cells (null = use global default) */
+  paddingOverride?: number | null;
+}

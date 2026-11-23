@@ -13,6 +13,7 @@ import { PlaceModelCommand } from '../../core/commands/PlacementCommands';
 import { PlacementSystem } from '../../runtime/systems/PlacementSystem';
 import { groundPlaneManager } from '../../runtime/systems/GroundPlane';
 import { SelectionService } from '../../core/services/SelectionService';
+import { EventBus } from '../../core/events';
 import { PointerInteractionLayer } from './PointerInteractionLayer';
 
 const GLTFModelRenderer: React.FC<{ url: string }> = ({ url }) => {
@@ -203,6 +204,7 @@ const NodeRenderer: React.FC<{ nodeId: string }> = ({ nodeId }) => {
   const activeGizmoMode = useEditorStore((state) => state.activeGizmoMode);
   const isSelected = selectedNodeId === nodeId;
   const initialTransformRef = React.useRef<any>(null);
+  const activeModeRef = React.useRef<string>('translate');
   const [targetObject, setTargetObject] = React.useState<THREE.Object3D | null>(null);
   const targetRef = React.useRef<THREE.Object3D | null>(null);
   const [tcInstance, setTcInstance] = React.useState<any>(null);
@@ -237,6 +239,9 @@ const NodeRenderer: React.FC<{ nodeId: string }> = ({ nodeId }) => {
       isDraggingRef.current = dragging;
 
       if (dragging) {
+        // Capture the active mode at drag-start so we know which property changed
+        const isXform = useEditorStore.getState().activeGizmoMode === 'transform';
+        activeModeRef.current = isXform ? 'translate' : useEditorStore.getState().activeGizmoMode;
         const currentNode = useSceneStore.getState().nodes[nodeId];
         if (currentNode) {
           initialTransformRef.current = {
@@ -249,14 +254,35 @@ const NodeRenderer: React.FC<{ nodeId: string }> = ({ nodeId }) => {
         if (initialTransformRef.current) {
           const obj = targetRef.current;
           if (obj) {
+            // Only commit the transform property that the current gizmo mode actually changed.
+            // This prevents rotation mode from accidentally overwriting position, etc.
+            const mode = activeModeRef.current;
+            const newTransform: Partial<{ position: [number, number, number]; rotation: [number, number, number]; scale: [number, number, number] }> = {};
+            const prevTransform: Partial<{ position: [number, number, number]; rotation: [number, number, number]; scale: [number, number, number] }> = {};
+
+            if (mode === 'translate') {
+              newTransform.position = [obj.position.x, obj.position.y, obj.position.z];
+              prevTransform.position = initialTransformRef.current.position;
+            } else if (mode === 'rotate') {
+              newTransform.rotation = [obj.rotation.x, obj.rotation.y, obj.rotation.z];
+              prevTransform.rotation = initialTransformRef.current.rotation;
+            } else if (mode === 'scale') {
+              newTransform.scale = [obj.scale.x, obj.scale.y, obj.scale.z];
+              prevTransform.scale = initialTransformRef.current.scale;
+            } else {
+              // Fallback: commit all
+              newTransform.position = [obj.position.x, obj.position.y, obj.position.z];
+              newTransform.rotation = [obj.rotation.x, obj.rotation.y, obj.rotation.z];
+              newTransform.scale = [obj.scale.x, obj.scale.y, obj.scale.z];
+              prevTransform.position = initialTransformRef.current.position;
+              prevTransform.rotation = initialTransformRef.current.rotation;
+              prevTransform.scale = initialTransformRef.current.scale;
+            }
+
             commandManager.executeCommand(new UpdateTransformCommand(
               nodeId,
-              {
-                position: [obj.position.x, obj.position.y, obj.position.z],
-                rotation: [obj.rotation.x, obj.rotation.y, obj.rotation.z],
-                scale: [obj.scale.x, obj.scale.y, obj.scale.z],
-              },
-              initialTransformRef.current
+              newTransform,
+              prevTransform
             ));
           }
           initialTransformRef.current = null;
@@ -264,8 +290,24 @@ const NodeRenderer: React.FC<{ nodeId: string }> = ({ nodeId }) => {
       }
     };
 
+    const onChange = () => {
+      if (isDraggingRef.current && targetRef.current) {
+        const obj = targetRef.current;
+        EventBus.emit('NODE_TRANSFORM_PREVIEW', {
+          nodeId: nodeId,
+          position: [obj.position.x, obj.position.y, obj.position.z],
+          rotation: [obj.rotation.x, obj.rotation.y, obj.rotation.z],
+          scale: [obj.scale.x, obj.scale.y, obj.scale.z]
+        });
+      }
+    };
+
     tcInstance.addEventListener('dragging-changed', onDraggingChanged);
-    return () => tcInstance.removeEventListener('dragging-changed', onDraggingChanged);
+    tcInstance.addEventListener('change', onChange);
+    return () => {
+      tcInstance.removeEventListener('dragging-changed', onDraggingChanged);
+      tcInstance.removeEventListener('change', onChange);
+    };
   }, [tcInstance, controls, nodeId]);
 
   // Ref callback for the scene object: sets initial transform + saves refs
@@ -352,6 +394,7 @@ const NodeRenderer: React.FC<{ nodeId: string }> = ({ nodeId }) => {
           ref={handleTcRef}
           object={targetObject || undefined}
           mode={currentMode as 'translate' | 'rotate' | 'scale'}
+          space="local"
         />
       )}
     </>
@@ -496,6 +539,17 @@ const DragDropHandler: React.FC = () => {
       } else {
         // Mock models: use drop point directly (they handle their own grounding)
         groundedPosition = [dropPoint.x, dropPoint.y, dropPoint.z];
+        
+        // Mock bounding info for foundation generation
+        const mockFootprintSize = assetId === 'mock-assembly-line' ? 3.2 : 6.0;
+        boundingInfo = {
+          min: [-mockFootprintSize / 2, 0, -mockFootprintSize / 2] as [number, number, number],
+          max: [mockFootprintSize / 2, 2, mockFootprintSize / 2] as [number, number, number],
+          center: [0, 1, 0] as [number, number, number],
+          dimensions: [mockFootprintSize, 2, mockFootprintSize] as [number, number, number],
+          footprint: [mockFootprintSize, mockFootprintSize] as [number, number],
+          minY: 0,
+        };
       }
 
       // Commit through PlaceModelCommand (undo/redo safe)
@@ -726,6 +780,8 @@ const PlacementPreview: React.FC = () => {
   );
 };
 
+import { FoundationRenderer } from './FoundationRenderer';
+
 export const Viewport: React.FC = () => {
   const rootNodeId = useSceneStore((state) => state.rootNodeId);
   const isGridVisible = useEditorStore((state) => state.isGridVisible);
@@ -756,6 +812,7 @@ export const Viewport: React.FC = () => {
           />
         )}
 
+        <FoundationRenderer />
         <NodeRenderer nodeId={rootNodeId} />
         <DragDropHandler />
         <PlacementPreview />
